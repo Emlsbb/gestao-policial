@@ -1,0 +1,15 @@
+# compiled output
+/node_modules
+/src/config/config.js
+
+# logs
+logs
+*. log
+npm-debug.log*
+
+# vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
