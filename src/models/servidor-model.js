@@ -9,6 +9,7 @@ class ServidorModel extends Model {
             ingresso: DataTypes.DATE,
             data_nasc: DataTypes.DATE,
             tipo_servidor: DataTypes.STRING,
+            email: DataTypes.STRING,
 
         }, {
             modelName: 'ServidorModel', //Nome que eu escolho para a tabela
