@@ -6,15 +6,25 @@ class SolicitacaoModel extends Model {
             nomesolicitacao: DataTypes.STRING,
             data: DataTypes.DATE,
             descricao: DataTypes.STRING,
-            // nomeservidor: DataTypes.STRING
+            pm_id: DataTypes.INTEGER,
+            pc_id: DataTypes.INTEGER,
 
         }, {
-            modelName: 'SolicitacoesModel', //Nome que eu escolho para a tabela
+            modelName: 'solicitacoes', //Nome que eu escolho para a tabela
             tableName: 'solicitacoes', //nome da tabela no banco
             timestamps: true,
             sequelize
         })
     }
+
+    static associate(models){
+        this.belongsTo(models.pms, {foreignKey: 'pm_id', as:'pms'})
+    }
+
+    static associate(models){
+        this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
+    }
+
 }
 
 module.exports = { SolicitacaoModel }

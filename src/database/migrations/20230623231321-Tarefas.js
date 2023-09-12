@@ -14,11 +14,38 @@ module.exports = {
         primaryKey: true
       },
 
-      nomeservidor: {
-        type: Sequelize.STRING,
-        allowNull: false,
-
+      pm_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "pms",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
       },
+
+      pc_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "pcs",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+      },
+
+      // gestores_id: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: true,
+      //   references: {
+      //     model: "gestores",
+      //     key: "id"
+      //   },
+      //   onUpdate: "CASCADE",
+      //   onDelete: "CASCADE"
+      // },
 
       nometarefa: {
         type: Sequelize.STRING(150),
@@ -27,6 +54,18 @@ module.exports = {
       },
 
       prazo: {
+        type: Sequelize.DATE,
+        allowNull: false,
+
+      },
+
+      createdAt: {
+        type: Sequelize.DATE,
+        allowNull: false,
+
+      },
+
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
 

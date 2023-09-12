@@ -5,15 +5,26 @@ class TarefaModel extends Model {
         super.init({
             nometarefa: DataTypes.STRING,
             prazo: DataTypes.DATE,
-            // nomeservidor: DataTypes.STRING
+            pm_id: DataTypes.INTEGER,
+            pc_id: DataTypes.INTEGER,
+           
 
         }, {
-            modelName: 'TarefaModel', //Nome que eu escolho para a tabela
+            modelName: 'tarefas', //Nome que eu escolho para a tabela
             tableName: 'tarefas', //nome da tabela no banco
             timestamps: true,
             sequelize
         })
     }
+
+    static associate(models){
+        this.belongsTo(models.pms, {foreignKey: 'pm_id', as:'pms'})
+    }
+
+    static associate(models){
+        this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
+    }
+
 }
 
 module.exports = { TarefaModel }

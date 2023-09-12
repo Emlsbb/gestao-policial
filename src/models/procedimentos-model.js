@@ -6,15 +6,30 @@ class ProcedimentoModel extends Model {
             nomeprocedimento: DataTypes.STRING,
             data: DataTypes.DATE,
             descricao: DataTypes.STRING,
-            // nomeservidor: DataTypes.STRING
+            pm_id: DataTypes.INTEGER,
+            pc_id: DataTypes.INTEGER,
+            // gestor_id: DataTypes.STRING,
 
         }, {
-            modelName: 'ProcedimentosModel', //Nome que eu escolho para a tabela
+            modelName: 'procedimentos', //Nome que eu escolho para a tabela
             tableName: 'procedimentos', //nome da tabela no banco
             timestamps: true,
             sequelize
         })
     }
+
+    static associate(models){
+        this.belongsTo(models.pms, {foreignKey: 'pm_id', as:'pms'})
+    }
+
+    static associate(models){
+        this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
+    }
+
+    // static associate(models){
+    //     this.belongsTo(models.gestores, {foreignKey: 'gestores_id', as:'gestores'})
+    // }
+
 }
 
 module.exports = { ProcedimentoModel }
