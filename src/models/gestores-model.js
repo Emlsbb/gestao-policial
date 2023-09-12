@@ -23,6 +23,14 @@ class GestorModel extends Model {
         this.hasMany(models.procedimentos, { foreignKey: 'gestor_id', as: 'gestores'})
     }
 
+    static associate(models) {
+        this.hasMany(models.tarefas, { foreignKey: 'gestor_id', as: 'gestores'})
+    }
+
+    static associate(models) {
+        this.hasMany(models.solicitacoes, { foreignKey: 'gestor_id', as: 'gestores'})
+    }
+    
 }
 
 module.exports = { GestorModel }
