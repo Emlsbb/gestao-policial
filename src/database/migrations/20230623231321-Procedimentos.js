@@ -1,5 +1,5 @@
 'use strict';
-//Criação da tabela tarefas no banco
+//Criação da tabela procedimentos no banco
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {

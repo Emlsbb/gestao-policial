@@ -1,5 +1,5 @@
 'use strict';
-//Criação da tabela servidor no Banco
+//Criação da tabela de gestores no Banco
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
