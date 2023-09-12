@@ -4,16 +4,16 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
    
-    await queryInterface.createTable('solicitacoes', 
+    await queryInterface.createTable('tarefas', 
     { 
       
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
+        primaryKey: true
       },
-      
+
       pm_id: {
         type: Sequelize.INTEGER,
         allowNull: true,
@@ -36,33 +36,26 @@ module.exports = {
         onDelete: "CASCADE"
       },
 
-      // gestores_id: {
-      //   type: Sequelize.INTEGER,
-      //   allowNull: true,
-      //   references: {
-      //     model: "gestores",
-      //     key: "id"
-      //   },
-      //   onUpdate: "CASCADE",
-      //   onDelete: "CASCADE"
-      // },
+      gestor_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: "gestores",
+          key: "id"
+        },
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+      },
 
-      nomesolicitacao: {
+      nometarefa: {
         type: Sequelize.STRING(150),
         allowNull: false,
 
       },
 
-      data: {
+      prazo: {
         type: Sequelize.DATE,
         allowNull: false,
-
-      },
-
-      descricao: {
-        type: Sequelize.STRING,
-        allowNull: true,
-
 
       },
 
@@ -78,15 +71,14 @@ module.exports = {
 
       },
     
-      
-
+    
     });
      
   },
-//Exclusão da tabela procedimentos no banco
+//Exclusão da tabela tarefas no banco
   async down (queryInterface, Sequelize) {
    
-    await queryInterface.dropTable('solicitacoes');
+    await queryInterface.dropTable('tarefas');
      
   }
 };

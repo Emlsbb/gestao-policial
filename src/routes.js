@@ -31,17 +31,17 @@ routes.get('/gestores',GestorController.findAll);
 routes.put('/gestores/:id',GestorController.update);
 routes.delete('/gestores/:id',GestorController.delete);
 
-//Tarefas
-routes.post('/tarefas',TarefaController.create); //rota funcionando
-routes.get('/tarefas',TarefaController.findAll);
-routes.put('/tarefas/:id', TarefaController.update);
-routes.delete('/tarefas/:id',TarefaController.delete);
-
 //Procedimentos
 routes.post('/procedimentos',ProcedimentoController.create); //rota funcionando
 routes.get('/procedimentos',ProcedimentoController.findAll);
 routes.put('/procedimentos/:id',ProcedimentoController.update);
 routes.delete('/procedimentos/:id',ProcedimentoController.delete);
+
+//Tarefas
+routes.post('/tarefas',TarefaController.create); //rota funcionando
+routes.get('/tarefas',TarefaController.findAll);
+routes.put('/tarefas/:id', TarefaController.update);
+routes.delete('/tarefas/:id',TarefaController.delete);
 
 //Solicitações
 routes.post('/solicitacoes',SolicitacaoController.create); //rota funcionando

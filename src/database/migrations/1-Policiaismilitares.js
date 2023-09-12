@@ -1,5 +1,5 @@
 'use strict';
-//Criação da tabela de policiais militares no banco
+//Criação da tabela dos policiais militares no banco
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -12,6 +12,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        
       },
 
       nome: {

@@ -8,7 +8,7 @@ class ProcedimentoModel extends Model {
             descricao: DataTypes.STRING,
             pm_id: DataTypes.INTEGER,
             pc_id: DataTypes.INTEGER,
-            // gestor_id: DataTypes.STRING,
+            gestor_id: DataTypes.INTEGER,
 
         }, {
             modelName: 'procedimentos', //Nome que eu escolho para a tabela
@@ -26,9 +26,9 @@ class ProcedimentoModel extends Model {
         this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
     }
 
-    // static associate(models){
-    //     this.belongsTo(models.gestores, {foreignKey: 'gestores_id', as:'gestores'})
-    // }
+    static associate(models){
+        this.belongsTo(models.gestores, {foreignKey: 'gestor_id', as:'gestores'})
+    }
 
 }
 

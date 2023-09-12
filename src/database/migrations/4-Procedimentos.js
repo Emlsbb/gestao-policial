@@ -1,5 +1,5 @@
 'use strict';
-//Criação da tabela procedimentos no banco
+//Criação da tabela tarefas no banco
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -36,16 +36,16 @@ module.exports = {
           onDelete: "CASCADE"
         },
 
-        // gestores_id: {
-        //   type: Sequelize.INTEGER,
-        //   allowNull: true,
-        //   references: {
-        //     model: "gestores",
-        //     key: "id"
-        //   },
-        //   onUpdate: "CASCADE",
-        //   onDelete: "CASCADE"
-        // },
+        gestor_id: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+          references: {
+            model: "gestores",
+            key: "id"
+          },
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE"
+        },
        
 
         nomeprocedimento: {

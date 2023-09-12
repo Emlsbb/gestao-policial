@@ -24,14 +24,15 @@ class PmModel extends Model {
     static associate(models) {
         this.hasMany(models.procedimentos, { foreignKey: 'pm_id', as: 'pms'})
     }
+    
+    static associate(models) {
+        this.hasMany(models.tarefas, { foreignKey: 'pm_id', as: 'pms'})
+    }
 
     static associate(models) {
         this.hasMany(models.solicitacoes, { foreignKey: 'pm_id', as: 'pms'})
     }
     
-    static associate(models) {
-        this.hasMany(models.tarefas, { foreignKey: 'pm_id', as: 'pms'})
-    }
 }
 
 module.exports = { PmModel }

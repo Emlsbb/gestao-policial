@@ -23,15 +23,15 @@ class PcModel extends Model {
     static associate(models) {
         this.hasMany(models.procedimentos, { foreignKey: 'pc_id', as: 'pcs'})
     }
-
-    static associate(models) {
-        this.hasMany(models.solicitacoes, { foreignKey: 'pc_id', as: 'pcs'})
-    }
     
     static associate(models) {
         this.hasMany(models.tarefas, { foreignKey: 'pc_id', as: 'pcs'})
     }
 
+    static associate(models) {
+        this.hasMany(models.solicitacoes, { foreignKey: 'pc_id', as: 'pcs'})
+    }
+    
 }
 
 module.exports = { PcModel }

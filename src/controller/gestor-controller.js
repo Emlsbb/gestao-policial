@@ -57,7 +57,7 @@ class GestorController {
                     nome, senha, sexo, data_nasc, endereco, email, organizacao
                 }, { where: { id } })
 
-                return res.status(200).json(gestor, { message: "gestor alterado com sucesso" })
+                return res.status(200).json({ gestor, message: "gestor alterado com sucesso" })
             }
 
             // GestorModel.update({

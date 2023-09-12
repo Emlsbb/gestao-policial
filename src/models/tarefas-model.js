@@ -7,6 +7,7 @@ class TarefaModel extends Model {
             prazo: DataTypes.DATE,
             pm_id: DataTypes.INTEGER,
             pc_id: DataTypes.INTEGER,
+            gestor_id: DataTypes.INTEGER,
            
 
         }, {
@@ -23,6 +24,10 @@ class TarefaModel extends Model {
 
     static associate(models){
         this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
+    }
+
+    static associate(models){
+        this.belongsTo(models.gestores, {foreignKey: 'gestor_id', as:'gestores'})
     }
 
 }

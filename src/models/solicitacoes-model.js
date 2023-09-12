@@ -8,6 +8,7 @@ class SolicitacaoModel extends Model {
             descricao: DataTypes.STRING,
             pm_id: DataTypes.INTEGER,
             pc_id: DataTypes.INTEGER,
+            gestor_id: DataTypes.INTEGER,
 
         }, {
             modelName: 'solicitacoes', //Nome que eu escolho para a tabela
@@ -23,6 +24,10 @@ class SolicitacaoModel extends Model {
 
     static associate(models){
         this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
+    }
+
+    static associate(models){
+        this.belongsTo(models.gestores, {foreignKey: 'gestor_id', as:'gestores'})
     }
 
 }

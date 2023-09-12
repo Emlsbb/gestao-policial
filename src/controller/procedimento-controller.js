@@ -4,8 +4,8 @@ const { ProcedimentoModel } = require("../models/procedimentos-model")
 class ProcedimentoController {
 
   async create(req, res) {
-    const { nomeprocedimento, data, descricao, pm_id, pc_id, } = req.body
-    const procedimento = await ProcedimentoModel.create({ nomeprocedimento, data, descricao, pm_id, pc_id, });
+    const { nomeprocedimento, data, descricao, pm_id, pc_id, gestor_id } = req.body
+    const procedimento = await ProcedimentoModel.create({ nomeprocedimento, data, descricao, pm_id, pc_id, gestor_id });
     return res.json(procedimento)
   }
 
@@ -16,9 +16,9 @@ class ProcedimentoController {
 
   async update(req, res) {
     const { id } = req.params
-    const { nomeprocedimento, data, descricao, pm_id, pc_id, } = req.body
+    const { nomeprocedimento, data, descricao, pm_id, pc_id, gestor_id } = req.body
     ProcedimentoModel.update({
-      nomeprocedimento, data, descricao, pm_id, pc_id,
+      nomeprocedimento, data, descricao, pm_id, pc_id, gestor_id
     },
       {
         where: { id }
