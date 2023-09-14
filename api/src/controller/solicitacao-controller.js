@@ -1,4 +1,4 @@
-//Controller do Usuario
+//Controller das solicitações
 const { SolicitacaoModel } = require("../models/solicitacoes-model")
 
 class SolicitacaoController {
@@ -41,4 +41,4 @@ class SolicitacaoController {
 
 }
 
-module.exports = new SolicitacaoController();
+module.exports = {SolicitacaoController};

@@ -1,4 +1,4 @@
-//Controller do Usuario
+//Controller das tarefas
 const { TarefaModel } = require("../models/tarefas-model")
 
 class TarefaController {
@@ -41,4 +41,4 @@ class TarefaController {
 
 }
 
-module.exports = new TarefaController();
+module.exports = {TarefaController};

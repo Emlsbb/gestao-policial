@@ -1,4 +1,4 @@
-//Controller do Usuario
+//Controller dos procedimentos
 const { ProcedimentoModel } = require("../models/procedimentos-model")
 
 class ProcedimentoController {
@@ -40,4 +40,4 @@ class ProcedimentoController {
 
 }
 
-module.exports = new ProcedimentoController();
+module.exports = {ProcedimentoController};
