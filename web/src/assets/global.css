@@ -1,0 +1,19 @@
+/* importando fonte  */
+/* fonte alternativa @import url('https://fonts.googleapis.com/css2?family=Comfortaa&family=Sen:wght@500&display=swap'); */
+/* font-family: 'Sen', sans-serif; */
+/* Importação do bootstrap */
+
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
+
+* {
+    margin: 0;
+    padding: 8;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: white;
+    font-family: 'Comfortaa', cursive;
+}
+
+
