@@ -11,7 +11,7 @@ const Background = ({ imageUrl }) => {
     left: 0,
     width: '100%',
     height: '100%',
-    opacity: 0.95, // Opacidade de 50%
+    opacity: 0.95, // Opacidade 
     zIndex: -1, // Coloca o fundo atrás do conteúdo
   };
 

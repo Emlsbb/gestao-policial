@@ -1,13 +1,12 @@
-const {Model, DataTypes} = require('sequelize')
+const { Model, DataTypes } = require('sequelize')
 
 class ProcedimentoModel extends Model {
-    static init (sequelize) {
+    static init(sequelize) {
         super.init({
             nomeprocedimento: DataTypes.STRING,
             data: DataTypes.DATE,
             descricao: DataTypes.STRING,
-            pm_id: DataTypes.INTEGER,
-            pc_id: DataTypes.INTEGER,
+            policial: DataTypes.STRING,
             gestor_id: DataTypes.INTEGER,
 
         }, {
@@ -18,16 +17,8 @@ class ProcedimentoModel extends Model {
         })
     }
 
-    static associate(models){
-        this.belongsTo(models.pms, {foreignKey: 'pm_id', as:'pms'})
-    }
-
-    static associate(models){
-        this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
-    }
-
-    static associate(models){
-        this.belongsTo(models.gestores, {foreignKey: 'gestor_id', as:'gestores'})
+    static associate(models) {
+        this.belongsTo(models.gestores, { foreignKey: 'gestor_id', as: 'gestores' })
     }
 
 }

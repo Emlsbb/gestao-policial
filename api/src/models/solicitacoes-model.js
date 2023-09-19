@@ -6,8 +6,7 @@ class SolicitacaoModel extends Model {
             nomesolicitacao: DataTypes.STRING,
             data: DataTypes.DATE,
             descricao: DataTypes.STRING,
-            pm_id: DataTypes.INTEGER,
-            pc_id: DataTypes.INTEGER,
+            policial: DataTypes.STRING,
             gestor_id: DataTypes.INTEGER,
 
         }, {
@@ -16,14 +15,6 @@ class SolicitacaoModel extends Model {
             timestamps: true,
             sequelize
         })
-    }
-
-    static associate(models){
-        this.belongsTo(models.pms, {foreignKey: 'pm_id', as:'pms'})
-    }
-
-    static associate(models){
-        this.belongsTo(models.pcs, {foreignKey: 'pc_id', as:'pcs'})
     }
 
     static associate(models){

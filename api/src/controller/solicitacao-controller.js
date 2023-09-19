@@ -4,8 +4,8 @@ const { SolicitacaoModel } = require("../models/solicitacoes-model")
 class SolicitacaoController {
 
     async create(req, res) {
-        const { nomesolicitacao, data, descricao, pm_id, pc_id, gestor_id} = req.body
-        const solicitacao = await SolicitacaoModel.create({ nomesolicitacao, data, descricao, pm_id, pc_id, gestor_id });
+        const { nomesolicitacao, data, descricao, policial, gestor_id } = req.body
+        const solicitacao = await SolicitacaoModel.create({ nomesolicitacao, data, descricao, policial, gestor_id });
         return res.json(solicitacao)
     }
 
@@ -16,9 +16,9 @@ class SolicitacaoController {
 
     async update(req, res) {
         const { id } = req.params
-        const { nomesolicitacao, data, descricao, pm_id, pc_id, gestor_id } = req.body
+        const { nomesolicitacao, data, descricao, policial, gestor_id } = req.body
         SolicitacaoModel.update({
-            nomesolicitacao, data, descricao, pm_id, pc_id, gestor_id
+            nomesolicitacao, data, descricao, policial, gestor_id
         },
             {
                 where: { id }
@@ -41,4 +41,4 @@ class SolicitacaoController {
 
 }
 
-module.exports = {SolicitacaoController};
+module.exports = { SolicitacaoController };
