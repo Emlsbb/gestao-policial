@@ -11,4 +11,5 @@ export async function registerUser(data) {
 export async function loginUser(data) {
     const result = await api.post('/gestores/login', data);
     sessionStorage.setItem('token', JSON.stringify(result.data.accessToken));
+    return result
 }

@@ -30,9 +30,9 @@ export const AppRoutes = () => {
                 <Route
                     path='/procedimentos'
                     exact element={(
-                        // <PrivateRoute>
+                        <PrivateRoute>
                             <Procedimentos />
-                        // </PrivateRoute>
+                        </PrivateRoute>
                     )}
                 />
                 <Route

@@ -53,8 +53,8 @@ export function Procedimentos() {
         try {
             await updateProced({
                 id: data.id,
-                nameProced: data.nameProced,
-                date: data.date,
+                nameProced: data.nomeprocedimento,
+                date: data.data,
                 description: data.description
             });
             await findProceds();
@@ -77,7 +77,7 @@ export function Procedimentos() {
     return (
         <>
             <Background imageUrl={imageUrl} />
-            <Sidebar/>
+            <Sidebar />
             <Container fluid>
                 <p></p>
                 <h1 className="text-center text-dark"> Procedimentos </h1>
@@ -99,7 +99,7 @@ export function Procedimentos() {
                                 key={index}
                                 crud={crud}
                                 removeProced={async () => await removeProced(crud.id)}
-                                editProced={editProced}
+                                findProceds={findProceds}
                             />
                         ))
                         : <p className="text-center">Não existe nenhum procedimento</p>}

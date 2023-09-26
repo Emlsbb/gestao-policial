@@ -21,6 +21,11 @@ export const Sidebar = () => {
         <li>
           <a href="dashboard">Dashboard</a>
         </li>
+        <div className='sair-btn'>
+        <li>
+          <a href="/">Sair</a>
+        </li>
+        </div>
       </ul>
       
     </nav>

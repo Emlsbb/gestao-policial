@@ -1,40 +1,44 @@
 /* src/Sidebar.css */
 #sidebar {
-    background-color: #00186B;
-    color: #fff;
-    position: fixed;
-    height: 100%;
-    left: 0;
-    top: 0;
-    width: 250px;
-    border-radius: 0;
-    overflow-y: auto;
-  }
-  
-  #sidebar .sidebar-header {
-    background-color: #00186B;
-    padding-top: 2rem;
-    text-align: center; /* Centralizar o texto no cabeçalho */
-  }
-  
-  #sidebar ul.components {
-    list-style-type: none; /* Remover marcadores de lista */
-    padding: 0;
-  }
-  
-  #sidebar ul.components li {
-    text-align: center; /* Centralizar o texto nos itens da lista */
-  }
-  
-  #sidebar ul.components li a {
-    color: #fff;
-    text-decoration: none; /* Remover sublinhado dos links */
-    display: block; /* Fazer com que os links ocupem toda a largura disponível */
-    padding: 10px; /* Adicionar espaçamento interno para os links */
-  }
-  
-  #sidebar ul.components li a:hover {
-    background-color: #042cb9;
-  }
-  
-  
+  background-color: #00186B;
+  color: #fff;
+  position: fixed;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 250px;
+  border-radius: 0;
+  overflow-y: auto;
+}
+
+#sidebar .sidebar-header {
+  background-color: #00186B;
+  padding-top: 2rem;
+  text-align: center; /* Centralizar o texto no cabeçalho */
+}
+
+#sidebar ul.components {
+  list-style-type: none; /* Remover marcadores de lista */
+  padding: 0;
+}
+
+#sidebar ul.components li {
+  text-align: center; /* Centralizar o texto nos itens da lista */
+}
+
+#sidebar ul.components li a {
+  color: #fff;
+  text-decoration: none; /* Remover sublinhado dos links */
+  display: block; /* Fazer com que os links ocupem toda a largura disponível */
+  padding: 10px; /* Adicionar espaçamento interno para os links */
+}
+
+#sidebar ul.components li a:hover {
+  background-color: #042cb9;
+}
+
+.sair-btn {
+  margin-top: 23.2rem;
+
+}
+

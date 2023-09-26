@@ -49,14 +49,13 @@ class GestorController {
     async login(req, res) {
         const httpHelper = new HttpHelper(res);
         try {
-            const { nome, senha, sexo, data_nasc, endereco, email, organizacao } = req.body
+            const { nome, senha,  email } = req.body
             if (
-                !nome || !senha || !sexo || !data_nasc
-                || !endereco || !email || !organizacao
+                !nome || !senha || !email 
             )
                 return httpHelper.badRequest(`
-                Nome, senha, sexo, data de nascimento, endereco, email, 
-                e organização são campos obrigatórios
+                Nome, senha e email, 
+                são campos obrigatórios
                 `);
             const gestorExist = await GestorModel.findOne({ where: { email } });
 

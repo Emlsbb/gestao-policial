@@ -105,10 +105,10 @@ export const Login = () => {
                                     })}
                                 />
                                 <div className="d-grid mt-3">
-                                    <Button className="btn btn-primary"type="submit">Entrar</Button>
+                                    <Button className="btn btn-primary" type="submit">Entrar</Button>
                                 </div>
                                 <div className="text-center mt-1">
-                                    <Link to="/register">Criar conta</Link>
+                                    <Link to="/cadastro">Criar conta</Link>
                                 </div>
                             </Col>
                         </Form>

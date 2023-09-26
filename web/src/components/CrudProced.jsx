@@ -10,8 +10,41 @@ export function CrudProced(props) {
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [isUpdated, setIsUpdated] = useState(false);
 
+    // async function editProced(data) {
+    //     try {
+    //         await updateProced({
+    //             id: data.id,
+    //             nameProced: data.nomeprocedimento,
+    //             date: data.data,
+    //             description: data.description
+    //         });
+    //         await props.findProceds();
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // } só substituir e alterar o botão que chama o editcrud
+
     async function editCrud(data) {
-        await props.editCrud({ ...data, id: props.crud.id });
+        console.log(data)
+        console.log(props.crud)
+        const accessToken = sessionStorage.getItem("token")
+        const response = await fetch(('http://localhost:8080/procedimentos/' + props.crud.id), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': "application/json",
+                'Authorization': `bearer ${JSON.parse(accessToken)}`
+            },
+            body: JSON.stringify({
+                ...data,
+                id: props.crud.id
+            })
+        })
+
+
+        await props.findProceds();
+
+
+        const responseJson = await response.json()
         setIsUpdated(false);
     }
 
@@ -47,7 +80,7 @@ export function CrudProced(props) {
                             required={true}
                             name='nameProced'
                             error={errors.nameProced}
-                            validations={register('nameProced', {
+                            validations={register('nomeprocedimento', {
                                 required: {
                                     value: true,
                                     message: 'O nome do procedimento é obrigatório.'
@@ -63,7 +96,7 @@ export function CrudProced(props) {
                             required={true}
                             name='date'
                             error={errors.date}
-                            validations={register('date', {
+                            validations={register('data', {
                                 required: {
                                     value: true,
                                     message: 'A data do procedimento é obrigatória.'
@@ -79,7 +112,7 @@ export function CrudProced(props) {
                             required={true}
                             name='description'
                             error={errors.description}
-                            validations={register('description', {
+                            validations={register('descricao', {
                                 required: {
                                     value: true,
                                     message: 'A descrição do procedimento é obrigatória.'
