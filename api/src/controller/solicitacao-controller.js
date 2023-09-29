@@ -38,7 +38,6 @@ class SolicitacaoController {
         return res.json('Solicitação deletada')
     }
 
-
 }
 
 module.exports = { SolicitacaoController };

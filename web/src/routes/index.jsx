@@ -5,9 +5,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Login } from '../pages/Login/Login'
 import { Cadastro } from '../pages/Cadastro/Cadastro'
 import { Procedimentos } from '../pages/Procedimentos/Procedimentos'
-import { Tarefas } from '../pages/Tarefas'
-import { Solicitacoes } from '../pages/Solicitacoes'
-import { Dashboard } from '../pages/Dashboard'
+import Tarefas from '../pages/Tarefas'
+import Solicitacoes from '../pages/Solicitacoes'
+import Dashboard from '../pages/Dashboard'
 
 //Requisitando autenticação
 import { Authentication } from '../utils/Authentication'
@@ -30,9 +30,9 @@ export const AppRoutes = () => {
                 <Route
                     path='/procedimentos'
                     exact element={(
-                        <PrivateRoute>
-                            <Procedimentos />
-                        </PrivateRoute>
+                        // <PrivateRoute>
+                        <Procedimentos />
+                        // </PrivateRoute>
                     )}
                 />
                 <Route

@@ -1,44 +1,50 @@
 //Controller das tarefas
-const { TarefaModel } = require("../models/tarefas-model")
+const { TarefaModel } = require("../models/tarefas-model");
 
 class TarefaController {
 
       async create(req, res) {
-            const { nometarefa, prazo, policial, gestor_id } = req.body
-            const tarefa = await TarefaModel.create({ nometarefa, prazo, policial, gestor_id });
-            return res.json(tarefa)
+            const { nometarefa, prazo, policial, gestor_id } = req.body;
+            const tarefa = await TarefaModel.create({
+                  nometarefa,
+                  prazo,
+                  policial,
+                  gestor_id,
+            });
+            return res.json(tarefa);
       }
 
       async findAll(req, res) {
             const tarefa = await TarefaModel.findAll();
-            return res.json(tarefa)
-
+            return res.json(tarefa);
       }
 
       async update(req, res) {
-            const { id } = req.params
-            const { nometarefa, prazo, policial, gestor_id } = req.body
-            TarefaModel.update({
-                  nometarefa, prazo, policial, gestor_id
-            },
+            const { id } = req.params;
+            const { nometarefa, prazo, policial, gestor_id } = req.body;
+            TarefaModel.update(
                   {
-                        where: { id }
-
-                  })
-            return res.json('Tarefa atualizada com sucesso')
+                        nometarefa,
+                        prazo,
+                        policial,
+                        gestor_id,
+                  },
+                  {
+                        where: { id },
+                  }
+            );
+            return res.json("Tarefa atualizada com sucesso");
       }
 
       async delete(req, res) {
-            const { id } = req.params
+            const { id } = req.params;
             const tarefa = await TarefaModel.destroy({
                   where: {
-                        id
-                  }
-
+                        id,
+                  },
             });
-            return res.json('Tarefa deletada')
+            return res.json("Tarefa deletada");
       }
-
 }
 
 module.exports = { TarefaController };
