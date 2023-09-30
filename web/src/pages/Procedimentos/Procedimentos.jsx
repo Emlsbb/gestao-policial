@@ -1,5 +1,5 @@
 //Requisição de bibliotecas
-import { Container, Col, Modal, Form, Button, Row } from "react-bootstrap";
+import { Container, Col, Modal, Form, Button, Row, Card } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import SearchBox from "../../components/SearchBox";
 import Filter from "../../components/Filter";
 import User from "../../components/User";
 import backgroundImage from "../../assets/background.jpg";
+import "./styles.css";
 
 //Importando funções do service
 import {
@@ -35,7 +36,7 @@ export function Procedimentos() {
     const [procedureDescription, setProcedureDescription] = useState("");
     const [filterVisible, setFilterVisible] = useState(false);
     const navigate = useNavigate();
-  
+
 
     const {
         handleSubmit,

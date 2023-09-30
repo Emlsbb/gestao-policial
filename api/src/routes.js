@@ -6,6 +6,7 @@ const { GestorController } = require('./controller/gestor-controller');
 const { ProcedimentoController } = require('./controller/procedimento-controller');
 const { TarefaController } = require('./controller/tarefa-controller');
 const { SolicitacaoController } = require('./controller/solicitacao-controller');
+const { DashboardController } = require("./controller/dashboard-controller");
 
 //Requisitando middlewares de autenticação
 const { gestorAuth } = require('./middleware/gestor-auth-middleware');
@@ -18,7 +19,7 @@ const gestorController = new GestorController();
 const procedimentoController = new ProcedimentoController();
 const tarefaController = new TarefaController();
 const solicitacaoController = new SolicitacaoController();
-
+const dashboardController = new DashboardController();
 
 //Gestores
 routes.post('/gestores', gestorController.create);
@@ -45,5 +46,8 @@ routes.post('/solicitacoes', gestorAuth, solicitacaoController.create);
 routes.get('/solicitacoes', gestorAuth, solicitacaoController.findAll);
 routes.put('/solicitacoes/:id', gestorAuth, solicitacaoController.update);
 routes.delete('/solicitacoes/:id', gestorAuth, solicitacaoController.delete);
+
+//Dashboard
+routes.get("/dashboard", gestorAuth, dashboardController.index);
 
 module.exports = { routes };

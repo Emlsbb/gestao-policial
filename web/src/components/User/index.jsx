@@ -1,19 +1,16 @@
+//Requisitção de bibliotecas
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-
 import { BiUserCircle } from "react-icons/bi";
-
 import { Input } from "../Input";
-
 import { updateUser } from "../../services/user-services";
-
 import { Container } from "./styles";
 
+//Auxiliares
 const User = () => {
   const [user, setUser] = useState({});
-
   const [nome, setNome] = useState();
   const [senha, setSenha] = useState();
   const [sexo, setSexo] = useState();
@@ -21,17 +18,17 @@ const User = () => {
   const [endereco, setEndereco] = useState();
   const [email, setEmail] = useState();
   const [organizacao, setOrganizacao] = useState();
-
   const [visible, setVisible] = useState(false);
-
   const { handleSubmit } = useForm();
 
+  //Pega usuário
   function getUser() {
     const data = JSON.parse(sessionStorage.getItem("$gestao_policial$gestor"));
 
     setUser(data);
   }
 
+  //Edita as informações do usuário
   async function saveUser() {
     try {
       await updateUser({
@@ -44,23 +41,36 @@ const User = () => {
         email: email || user.email,
         organizacao: organizacao || user.organizacao,
       });
-
       getUser();
       setVisible(false);
-      toast.success("Usuario salvo com sucesso");
+      toast.success("Usuário salvo com sucesso");
     } catch (error) {
       console.log(error);
       toast.error("Falha ao salvar usuário");
     }
   }
 
+  //Fecha o modal
+  function close() {
+    setVisible(false);
+  }
+
   useEffect(() => {
     getUser();
+    console.log(user);
   }, []);
 
   return (
-    <Container onClick={() => setVisible(true)}>
-      <BiUserCircle size={32} color="white" />
+    <Container>
+      <BiUserCircle
+        style={{
+          width: "100%",
+          height: "100%",
+          padding: "0.5rem",
+        }}
+        color="white"
+        onClick={() => setVisible(true)}
+      />
 
       <Modal show={visible} onHide={() => setVisible(false)}>
         <Modal.Header>
@@ -71,7 +81,7 @@ const User = () => {
             <Col>
               <Input
                 className="mb-2"
-                label="nome"
+                label="Nome"
                 type="text"
                 placeholder="Insira seu nome"
                 required={true}
@@ -79,19 +89,23 @@ const User = () => {
                 // defaultValue={user.nome}
                 onChange={(e) => setNome(e.target.value)}
               />
-              <Input
-                className="mb-2"
-                label="sexo"
-                type="text"
-                placeholder="Insira seu sexo"
+              <Form.Select
+                className="mb-3"
+                title="Selecione seu sexo"
                 required={true}
                 name="sexo"
-                // defaultValue={user.sexo}
-                onChange={(e) => setSexo(e.target.value)}
-              />
+                aria-label="Selecione seu sexo"
+                onChange={(e) => {
+                  setSexo(e.target.value);
+                }}
+              >
+                <option>Selecione seu sexo</option>
+                {/* <option selected={user.sexo === "Masculino"}>Masculino</option>
+                <option selected={user.sexo === "Feminino"}>Feminino</option> */}
+              </Form.Select>
               <Input
                 className="mb-2"
-                label="data de nascimento"
+                label="Data de nascimento"
                 type="date"
                 required={true}
                 name="data_nasc"
@@ -100,7 +114,7 @@ const User = () => {
               />
               <Input
                 className="mb-2"
-                label="endereco"
+                label="Endereço"
                 type="text"
                 placeholder="Insira seu endereço"
                 required={true}
@@ -108,16 +122,27 @@ const User = () => {
                 // defaultValue={user.endereco}
                 onChange={(e) => setEndereco(e.target.value)}
               />
-              <Input
-                className="mb-2"
-                label="Organização"
-                type="text"
-                placeholder="Insira sua organização"
+              <Form.Select
+                className="mb-3"
+                title="Selecione sua organização"
                 required={true}
                 name="organizacao"
-                // defaultValue={user.organizacao}
-                onChange={(e) => setOrganizacao(e.target.value)}
-              />
+                aria-label="Selecione sua organização"
+                onChange={(e) => {
+                  setOrganizacao(e.target.value);
+                }}
+              >
+                <option>Selecione sua organização</option>
+                {/* <option selected={user.organizacao === "Policial militar"}>
+                  Policial militar
+                </option>
+                <option selected={user.organizacao === "Policial civil"}>
+                  Policial civil
+                </option>
+                <option selected={user.organizacao === "Politec"}>
+                  Politec
+                </option> */}
+              </Form.Select>
               <Input
                 className="mb-2"
                 label="E-mail"
@@ -144,11 +169,7 @@ const User = () => {
             <Button variant="primary" type="submit" onClick={saveUser}>
               Salvar
             </Button>
-            <Button
-              variant="secondary"
-              type="button"
-              onClick={() => setVisible(false)}
-            >
+            <Button variant="secondary" type="button" onClick={close}>
               Fechar
             </Button>
           </Modal.Footer>
