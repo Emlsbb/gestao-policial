@@ -64,7 +64,7 @@ const Solicitacoes = () => {
     }
   }
 
-   //Procura solicitação
+  //Procura solicitação
   async function findRequests() {
     const result = await getSolicit();
 
@@ -72,7 +72,7 @@ const Solicitacoes = () => {
     setFilteredRequests(result.data);
   }
 
-   //Edita solicitação
+  //Edita solicitação
   async function editRequest() {
     try {
       const data = {
@@ -98,7 +98,7 @@ const Solicitacoes = () => {
     }
   }
 
-   //Deleta solicitação
+  //Deleta solicitação
   async function removeRequest(s) {
     try {
       const data = {
@@ -136,7 +136,7 @@ const Solicitacoes = () => {
       <Sidebar />
       <Background imageUrl={backgroundImage} />
       <Container>
-        <h1 className="title">Solicitações para serem realizadas</h1>
+        <h1 className="title">Solicitações</h1>
         <SearchBox
           value={searchText}
           setValue={setSearchText}
@@ -187,23 +187,13 @@ const Solicitacoes = () => {
                     </tr>
                   )
               )}
-
-            {filteredRequests &&
-              filteredRequests?.filter(
-                (r) =>
-                  r.nomesolicitacao
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                  r.policial
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLowerCase())
-              ).length === 0 && (
-                <p className="text-center no_requests">
+            {filteredRequests && filteredRequests.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center no_requests">
                   Não existe nenhuma solicitação
-                </p>
-              )}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <Button

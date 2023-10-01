@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import { toast } from "react-toastify";
-
 import { Sidebar } from "../../components/Sidebar";
 import Background from "../../components/background";
 import User from "../../components/User";
-
 import backgroundImage from "../../assets/background.jpg";
-
 import { index } from "../../services/dashboard-service";
-
 import { Container } from "./styles";
 
 const Dashboard = () => {

@@ -12,9 +12,7 @@ export const Container = styled.div`
 
   .title {
     color: white;
-
     font-size: 1.5rem;
-
     background: #929292;
     border-radius: 0.5rem;
     padding: 2rem;
@@ -22,14 +20,11 @@ export const Container = styled.div`
 
   table {
     margin-top: 2rem;
-
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
     table-layout: fixed;
-
     color: white;
-
     margin-bottom: 4rem;
 
     th,

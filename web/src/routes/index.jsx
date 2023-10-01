@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 //Requisição das páginas
 import { Login } from '../pages/Login/Login'
 import { Cadastro } from '../pages/Cadastro/Cadastro'
-import { Procedimentos } from '../pages/Procedimentos/Procedimentos'
+import Procedimentos  from '../pages/Procedimentos/Procedimentos'
 import Tarefas from '../pages/Tarefas'
 import Solicitacoes from '../pages/Solicitacoes'
 import Dashboard from '../pages/Dashboard'

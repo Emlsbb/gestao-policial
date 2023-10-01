@@ -1,4 +1,3 @@
-//Requisitção de bibliotecas
 import { useState, useEffect } from "react";
 import { Modal, Button, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -8,7 +7,7 @@ import { Input } from "../Input";
 import { updateUser } from "../../services/user-services";
 import { Container } from "./styles";
 
-//Auxiliares
+// Auxiliares
 const User = () => {
   const [user, setUser] = useState({});
   const [nome, setNome] = useState();
@@ -19,22 +18,22 @@ const User = () => {
   const [email, setEmail] = useState();
   const [organizacao, setOrganizacao] = useState();
   const [visible, setVisible] = useState(false);
+  const [orgChangeCount, setOrgChangeCount] = useState(0); // Contador de mudanças de organização
   const { handleSubmit } = useForm();
 
-  //Pega usuário
+  // Pega usuário
   function getUser() {
     const data = JSON.parse(sessionStorage.getItem("$gestao_policial$gestor"));
-
     setUser(data);
   }
 
-  //Edita as informações do usuário
+  // Edita as informações do usuário
   async function saveUser() {
     try {
       await updateUser({
         id: user.id,
         nome: nome || user.nome,
-        senha,
+        senha: senha || user.senha,
         sexo: sexo || user.sexo,
         data_nasc: dataNasc || user.data_nasc,
         endereco: endereco || user.endereco,
@@ -50,7 +49,7 @@ const User = () => {
     }
   }
 
-  //Fecha o modal
+  // Fecha o modal
   function close() {
     setVisible(false);
   }
@@ -59,6 +58,41 @@ const User = () => {
     getUser();
     console.log(user);
   }, []);
+
+  // Função para lidar com a mudança na organização
+  async function handleOrgChange(e) {
+    try {
+      if (orgChangeCount < 3) {
+        setOrganizacao(e.target.value);
+        setOrgChangeCount(orgChangeCount + 1);
+      }
+      toast.error("Você atingiu o limite de mudanças de organização");
+    } catch (error) {
+      console.log(error);
+      toast.error("Falha ao salvar usuário");
+    }
+  }
+
+  async function saveUser() {
+    try {
+      await updateUser({
+        id: user.id,
+        nome: nome || user.nome,
+        senha: senha || user.senha,
+        sexo: sexo || user.sexo,
+        data_nasc: dataNasc || user.data_nasc,
+        endereco: endereco || user.endereco,
+        email: email || user.email,
+        organizacao: organizacao || user.organizacao,
+      });
+      getUser();
+      setVisible(false);
+      toast.success("Usuário salvo com sucesso");
+    } catch (error) {
+      console.log(error);
+      toast.error("Falha ao salvar usuário");
+    }
+  }
 
   return (
     <Container>
@@ -86,7 +120,7 @@ const User = () => {
                 placeholder="Insira seu nome"
                 required={true}
                 name="nome"
-                // defaultValue={user.nome}
+                defaultValue={user.nome}
                 onChange={(e) => setNome(e.target.value)}
               />
               <Form.Select
@@ -100,8 +134,8 @@ const User = () => {
                 }}
               >
                 <option>Selecione seu sexo</option>
-                {/* <option selected={user.sexo === "Masculino"}>Masculino</option>
-                <option selected={user.sexo === "Feminino"}>Feminino</option> */}
+                <option selected={user.sexo === "Masculino"}>Masculino</option>
+                <option selected={user.sexo === "Feminino"}>Feminino</option>
               </Form.Select>
               <Input
                 className="mb-2"
@@ -109,7 +143,7 @@ const User = () => {
                 type="date"
                 required={true}
                 name="data_nasc"
-                // defaultValue={user?.data_nasc?.split("T")[0]}
+                defaultValue={user?.data_nasc?.split("T")[0]}
                 onChange={(e) => setDataNasc(e.target.value)}
               />
               <Input
@@ -119,7 +153,7 @@ const User = () => {
                 placeholder="Insira seu endereço"
                 required={true}
                 name="endereco"
-                // defaultValue={user.endereco}
+                defaultValue={user.endereco}
                 onChange={(e) => setEndereco(e.target.value)}
               />
               <Form.Select
@@ -128,12 +162,11 @@ const User = () => {
                 required={true}
                 name="organizacao"
                 aria-label="Selecione sua organização"
-                onChange={(e) => {
-                  setOrganizacao(e.target.value);
-                }}
+                onChange={handleOrgChange}
+                value={organizacao}
               >
                 <option>Selecione sua organização</option>
-                {/* <option selected={user.organizacao === "Policial militar"}>
+                <option selected={user.organizacao === "Policial militar"}>
                   Policial militar
                 </option>
                 <option selected={user.organizacao === "Policial civil"}>
@@ -141,7 +174,7 @@ const User = () => {
                 </option>
                 <option selected={user.organizacao === "Politec"}>
                   Politec
-                </option> */}
+                </option>
               </Form.Select>
               <Input
                 className="mb-2"
@@ -150,7 +183,7 @@ const User = () => {
                 placeholder="Insira seu e-mail"
                 required={true}
                 name="email"
-                // defaultValue={user.email}
+                defaultValue={user.email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <Input
@@ -160,7 +193,7 @@ const User = () => {
                 placeholder="Insira sua senha"
                 required={true}
                 name="senha"
-                // defaultValue={user.senha}
+                defaultValue={user.senha}
                 onChange={(e) => setSenha(e.target.value)}
               />
             </Col>

@@ -10,6 +10,7 @@ export async function createProced(data) {
             nomeprocedimento: data.procedureName,
             data: data.procedureDate,
             descricao: data.procedureDescription,
+            policial: data.procedureCop,
         },
         {
             headers: {
@@ -41,6 +42,7 @@ export async function updateProced(data) {
             nomeprocedimento: data.procedureName,
             data: data.procedureDate,
             descricao: data.procedureDescription,
+            policial: data.procedureCop,
         },
         {
             headers: {

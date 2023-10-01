@@ -126,7 +126,7 @@ const Tarefas = () => {
       <Sidebar />
       <Background imageUrl={backgroundImage} />
       <Container>
-        <h1 className="title">Tarefas para serem realizadas</h1>
+        <h1 className="title">Tarefas</h1>
         <SearchBox
           value={searchText}
           setValue={setSearchText}
@@ -177,23 +177,13 @@ const Tarefas = () => {
                     </tr>
                   )
               )}
-
-            {filteredTasks &&
-              filteredTasks?.filter(
-                (s) =>
-                  s.nometarefa
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                  s.policial
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLowerCase())
-              ).length === 0 && (
-                <p className="text-center no_schedule">
+            {filteredTasks && filteredTasks.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center no_requests">
                   Não existe nenhuma tarefa
-                </p>
-              )}
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
         <Button
