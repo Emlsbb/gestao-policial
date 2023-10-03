@@ -30,6 +30,19 @@ class GestorController {
       const gestorExist = await GestorModel.findOne({ where: { email } });
       if (gestorExist) return httpHelper.badRequest("E-mail já cadastrado!");
 
+      const dataNascimento = new Date(data_nasc);
+      const hoje = new Date();
+      const idade = hoje.getFullYear() - dataNascimento.getFullYear();
+      const mesAtual = hoje.getMonth() + 1;
+      const mesNascimento = dataNascimento.getMonth() + 1;
+  
+      if (
+        idade < 18 ||
+        (idade === 18 && mesNascimento > mesAtual)
+      ) {
+        return httpHelper.badRequest("Você deve ser maior de idade para se cadastrar");
+      }
+
       const senhaHashed = await bcrypt.hash(senha, Number(process.env.SALT));
       const gestor = await GestorModel.create({
         nome,

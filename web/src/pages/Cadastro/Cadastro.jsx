@@ -6,22 +6,29 @@ import { useForm } from "react-hook-form";
 import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
 import Background from "../../components/background"
+import backgroundImage from "../../assets/backgroundII.jpg";
 import './styles.css'
 
 //Requirindo service para cadastro
 import { registerUser } from "../../services/user-services"
 
 export const Cadastro = () => {
+
   //Criando auxiliares
   const { handleSubmit, register, formState: { errors } } = useForm();
   const [result, setResult] = useState(null);
   const navigate = useNavigate();
-  const imageUrl = 'https://www.saojosedoxingu.mt.gov.br/fotos_bancoimagens/1910.jpg'
+  const [sexo, setSexo] = useState("");
+  const [org, setOrg] = useState("");
 
   //Redirecionamento no cadastro
   const onSubmit = async (data) => {
     try {
-      const user = await registerUser(data);
+      const user = await registerUser({
+        ...data,
+        sexo,
+        organizacao: org,
+      });
       setResult(user);
       navigate('/procedimentos');
     } catch (error) {
@@ -35,7 +42,7 @@ export const Cadastro = () => {
 
   return (
     <>
-      <Background imageUrl={imageUrl} />
+      <Background imageUrl={backgroundImage} />
       <Container>
         <Modal
           show={result}
@@ -44,13 +51,13 @@ export const Cadastro = () => {
           handleClose={() => setResult(null)}
         />
         <div className="template d-flex justify-content-center align-items-center 100-w vh-80">
-          <div className="form_container p-5 rounded bg-white">
+          <div className="form_container p-4 rounded bg-white mt-3">
             <Form
               noValidate
               validated={!!errors}
               onSubmit={handleSubmit(onSubmit)}
             >
-              <h3 className="text-center"> Cadastro </h3>
+              <h2 className="text-center text-primary mb-3"> Cadastro </h2>
               <Col>
                 <Input
                   className="mb-2"
@@ -67,21 +74,21 @@ export const Cadastro = () => {
                     },
                   })}
                 />
-                <Input
+                 <Form.Select
                   className="mb-2"
-                  label="sexo"
-                  type="text"
-                  placeholder="Insira seu sexo"
-                  error={errors.sexo}
+                  title="Selecione seu sexo"
                   required={true}
+                  error={errors.sexo}
                   name="sexo"
-                  validations={register('sexo', {
-                    required: {
-                      value: true,
-                      message: 'O sexo é obrigatório'
-                    },
-                  })}
-                />
+                  aria-label="Selecione seu sexo"
+                  onChange={(e) => {
+                    setSexo(e.target.value);
+                  }}
+                >
+                  <option selected disabled>Selecione seu sexo</option>
+                  <option>Masculino</option>
+                  <option>Feminino</option>
+                </Form.Select>
                 <Input
                   className="mb-2"
                   label="data de nascimento"
@@ -109,23 +116,28 @@ export const Cadastro = () => {
                       value: true,
                       message: 'Seu endereço é obrigatório'
                     },
+                    pattern: {
+                      value: /^([\p{L}0-9\s]+), (\d+)(?:, (.*?)), ([\p{L}0-9\s]+), ([\p{L}\s]+), (\d{5}-\d{3})$/u,
+                      message: "Siga este padrão: Rua João Nascimento, 10, quadra 08, Parque Cuiabá, Cuiabá, 12345-678"
+                    }
                   })}
                 />
-                <Input
+             <Form.Select
                   className="mb-2"
-                  label="Organização"
-                  type="text"
-                  placeholder="Insira sua organização"
-                  error={errors.organizacao}
+                  title="Selecione sua organização"
                   required={true}
+                  error={errors.organizacao}
                   name="organizacao"
-                  validations={register('organizacao', {
-                    required: {
-                      value: true,
-                      message: 'Sua organizacao é obrigatória'
-                    },
-                  })}
-                />
+                  aria-label="Selecione sua organização"
+                  onChange={(e) => {
+                    setOrg(e.target.value);
+                  }}
+                >
+                  <option selected disabled>Selecione sua organização</option>
+                  <option>Policia-Militar</option>
+                  <option>Policia-Civil</option>
+                  <option>Politec</option>
+                </Form.Select>
                 <Input
                   className="mb-2"
                   label="E-mail"
@@ -161,7 +173,7 @@ export const Cadastro = () => {
                   })}
                 />
                 <div className="d-grid mt-3">
-                  <Button className="btn btn-primary"type="submit">Criar</Button>
+                  <Button className="btn btn-primary" type="submit">Criar</Button>
                 </div>
                 <div className="text-center mt-1">
                   <Link to="/">Já tenho uma conta</Link>

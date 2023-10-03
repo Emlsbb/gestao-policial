@@ -108,7 +108,7 @@ const User = () => {
 
       <Modal show={visible} onHide={() => setVisible(false)}>
         <Modal.Header>
-          <Modal.Title>Editar usuário</Modal.Title>
+          <Modal.Title >Editar usuário</Modal.Title>
         </Modal.Header>
         <Form noValidate onSubmit={handleSubmit(saveUser)}>
           <Modal.Body>

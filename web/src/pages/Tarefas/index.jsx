@@ -1,6 +1,6 @@
 //Requisitando bibliotecas
 import { useState, useEffect } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Pagination } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 
 //Requisitando componentes

@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from 'react-router-dom'
-import { Button, Col, Container, Form } from "react-bootstrap";
-import Background from "../../components/background"
-import './styles.css'
 
 //Requirindo componentes
 import { Input } from "../../components/Input";
 import { Modal } from "../../components/Modal";
+import { Button, Col, Container, Form } from "react-bootstrap";
+import Background from "../../components/background"
+import backgroundImage from "../../assets/backgroundII.jpg";
+import './styles.css'
 
 //Requirindo Service
 import { loginUser } from "../../services/user-services";
@@ -19,7 +20,6 @@ export const Login = () => {
     const { handleSubmit, register, formState: { errors } } = useForm();
     const [result, setResult] = useState(null);
     const navigate = useNavigate();
-    const imageUrl = 'https://www.saojosedoxingu.mt.gov.br/fotos_bancoimagens/1910.jpg'
 
     const onSubmit = async (data) => {
         try {
@@ -36,7 +36,7 @@ export const Login = () => {
 
     return (
         <>
-            <Background imageUrl={imageUrl} />
+            <Background imageUrl={backgroundImage} />
             <Container>
                 <Modal
                     show={result}
@@ -44,16 +44,14 @@ export const Login = () => {
                     message={result?.message}
                     handleClose={() => setResult(null)}
                 />
-                <p></p>
-                <h2 className="text-center text-primary"> Login </h2>
-
-                <div className="template d-flex justify-content-center align-items-center vh-80 ">
-                    <div className="form_container p-5 rounded bg-white">
+                <div className="template d-flex justify-content-center align-items-center vh-80 mt-5">
+                    <div className="form_container p-4 rounded bg-white mt-4">
                         <Form
                             noValidate
                             validated={!!errors}
                             onSubmit={handleSubmit(onSubmit)}
                         >
+                            <h2 className="text-center text-primary mb-3">Login</h2>
                             <Col>
                                 <Input
                                     className="mb-2"
@@ -100,7 +98,7 @@ export const Login = () => {
                                     validations={register('senha', {
                                         required: {
                                             value: true,
-                                            message: 'Senha é obrigatório'
+                                            message: 'Senha é obrigatória'
                                         }
                                     })}
                                 />

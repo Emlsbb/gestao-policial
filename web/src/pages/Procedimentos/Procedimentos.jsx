@@ -1,10 +1,10 @@
-//Requisição de Bibliotecas
+// Requisição de Bibliotecas
 import { useState, useEffect } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Pagination } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-//Requisição de compononentes
+// Requisição de componentes
 import { Sidebar } from "../../components/Sidebar";
 import { Input } from "../../components/Input";
 import Background from "../../components/background";
@@ -12,21 +12,24 @@ import SearchBox from "../../components/SearchBox";
 import Filter from "../../components/Filter";
 import User from "../../components/User";
 import backgroundImage from "../../assets/background.jpg";
-import { Container, EditButton, DeleteButton } from "./styles";
-
-//Importando funções do service
 import {
-    createProced,
-    getProced,
-    updateProced,
-    deleteProced
+  Container,
+  EditButton,
+  DeleteButton,
+} from "./styles";
+
+// Importando funções do service
+import {
+  createProced,
+  getProced,
+  updateProced,
+  deleteProced,
 } from "../../services/proced-service";
 
-
-//Auxiliares
+// Auxiliares
 const Procedimentos = () => {
   const [proceds, setProceds] = useState([]);
-  const [filteredProceds,  setFilteredProceds] = useState([]);
+  const [filteredProceds, setFilteredProceds] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -36,6 +39,8 @@ const Procedimentos = () => {
   const [procedureDescription, setProcedureDescription] = useState("");
   const [procedureCop, setProcedureCop] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   const {
     handleSubmit,
@@ -43,7 +48,7 @@ const Procedimentos = () => {
     formState: { errors },
   } = useForm();
 
-  //Cria procedimento
+  // Cria procedimento
   async function addProced(data) {
     try {
       data = {
@@ -64,7 +69,7 @@ const Procedimentos = () => {
     }
   }
 
-  //Procura procedimento
+  // Procura procedimento
   async function findProceds() {
     const result = await getProced();
 
@@ -72,7 +77,7 @@ const Procedimentos = () => {
     setFilteredProceds(result.data);
   }
 
-  //Edita procedimento
+  // Edita procedimento
   async function editProceds() {
     try {
       const data = {
@@ -98,7 +103,7 @@ const Procedimentos = () => {
     }
   }
 
-  //Deleta procedimento
+  // Deleta procedimento
   async function removeProced(s) {
     try {
       const data = {
@@ -114,7 +119,7 @@ const Procedimentos = () => {
     }
   }
 
-  //Filtra por período
+  // Filtra por período
   function filter(initialDate, finalDate) {
     if (initialDate && finalDate) {
       var items = proceds.filter((a) => {
@@ -122,14 +127,24 @@ const Procedimentos = () => {
         return date >= new Date(initialDate) && date <= new Date(finalDate);
       });
 
-       setFilteredProceds(items);
+      setFilteredProceds(items);
     }
   }
 
-  //Atualiza a lista
+  // Atualiza a lista
   useEffect(() => {
     findProceds();
   }, []);
+
+  // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredProceds.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Função para mudar a página atual
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <>
@@ -142,7 +157,7 @@ const Procedimentos = () => {
           setValue={setSearchText}
           setFilterVisible={setFilterVisible}
         />
-        <table>
+        <table className="mb-3">
           <thead>
             <tr>
               <th>ID</th>
@@ -152,50 +167,65 @@ const Procedimentos = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredProceds &&
-              filteredProceds?.map(
-                (r) =>
-                  (r.nomeprocedimento
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    r.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
-                    <tr key={r.id}>
-                      <td>{r.id}</td>
-                      <td>{r.nomeprocedimento}</td>
-                      <td>{new Date(r.data).toLocaleDateString()}</td>
-                      <td>
-                        <EditButton
-                          onClick={() => {
-                            setSelectedProcedure(r);
-                            setIsUpdated(true);
-                          }}
-                        >
-                          Editar
-                        </EditButton>
-                        <DeleteButton
-                          onClick={() => {
-                            removeProced(r);
-                          }}
-                        >
-                          Deletar
-                        </DeleteButton>
-                      </td>
-                    </tr>
-                  )
-              )}
+            {currentItems &&
+              currentItems.map((r) => (
+                <tr key={r.id}>
+                  <td>{r.id}</td>
+                  <td>{r.nomeprocedimento}</td>
+                  <td>{new Date(r.data).toLocaleDateString()}</td>
+                  <td>
+                    <EditButton className="mb-2"
+                      onClick={() => {
+                        setSelectedProcedure(r);
+                        setIsUpdated(true);
+                      }}
+                    >
+                      Editar
+                    </EditButton>
+                    <DeleteButton
+                      onClick={() => {
+                        removeProced(r);
+                      }}
+                    >
+                      Deletar
+                    </DeleteButton>
+                  </td>
+                </tr>
+              ))}
             {filteredProceds && filteredProceds.length === 0 && (
               <tr>
                 <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhum procedimento
+                  Não existe nenhuma solicitação
                 </td>
               </tr>
             )}
           </tbody>
         </table>
+        <div>
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            />
+            {Array.from({
+              length: Math.ceil(filteredProceds.length / itemsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => paginate(currentPage + 1)}
+              disabled={
+                currentPage === Math.ceil(filteredProceds.length / itemsPerPage)
+              }
+            />
+          </Pagination>
+        </div>
         <Button
           className="create_button"
           onClick={() => {
@@ -244,7 +274,9 @@ const Procedimentos = () => {
                 required={true}
                 name="procedureDate"
                 error={errors.date}
-                defaultValue={new Date().toString().split("T")[0]}
+                defaultValue={new Date()
+                  .toString()
+                  .split("T")[0]}
                 onChange={(e) => setProcedureDate(e.target.value)}
                 validations={register("procedureDate", {
                   required: {
@@ -305,10 +337,11 @@ const Procedimentos = () => {
         </Modal>
 
         <Modal show={isUpdated} onHide={() => setIsUpdated(false)}>
-          <Modal.Header> 
-            <Modal.Title>Editar procedimento: {selectedProcedure?.id}</Modal.Title>
+          <Modal.Header>
+            <Modal.Title>
+              Editar procedimento: {selectedProcedure?.id}
+            </Modal.Title>
           </Modal.Header>
-          {/* se der erro mudar .id para .nomeprocedimento  */}
           <Form
             noValidate
             onSubmit={handleSubmit(editProceds)}

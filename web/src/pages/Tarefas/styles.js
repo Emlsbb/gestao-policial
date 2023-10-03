@@ -12,9 +12,7 @@ export const Container = styled.div`
 
   .title {
     color: white;
-
     font-size: 1.5rem;
-
     background: #929292;
     border-radius: 0.5rem;
     padding: 2rem;
@@ -22,14 +20,11 @@ export const Container = styled.div`
 
   table {
     margin-top: 2rem;
-
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 15px;
     table-layout: fixed;
-
     color: white;
-
     margin-bottom: 4rem;
 
     th,
@@ -44,16 +39,20 @@ export const Container = styled.div`
     }
   }
 `;
-
 export const EditButton = styled.button`
   background: none;
   outline: none;
   border: none;
-  background: #907627;
+  background: #C39A03;
   height: 3rem;
   border-radius: 0.5rem;
   color: white;
   margin-right: 1rem;
+
+  &:hover {
+    background: #907627; 
+    cursor: pointer; 
+  }
 `;
 
 export const DeleteButton = styled.button`
@@ -64,4 +63,10 @@ export const DeleteButton = styled.button`
   height: 3rem;
   border-radius: 0.5rem;
   color: white;
+
+
+  &:hover {
+    background: #790505; 
+    cursor: pointer; 
+  }
 `;

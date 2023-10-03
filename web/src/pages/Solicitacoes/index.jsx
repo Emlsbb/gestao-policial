@@ -1,6 +1,6 @@
 //Requisição de Bibliotecas
 import { useState, useEffect } from "react";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form, Pagination } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
@@ -36,6 +36,8 @@ const Solicitacoes = () => {
   const [requestCop, setRequestCop] = useState("");
   const [selectedRequest, setSelectedRequest] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3; 
 
   const {
     handleSubmit,
@@ -126,6 +128,16 @@ const Solicitacoes = () => {
     }
   }
 
+   // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
+   const indexOfLastItem = currentPage * itemsPerPage;
+   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+   const currentItems = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
+ 
+   // Função para mudar a página atual
+   const paginate = (pageNumber) => {
+     setCurrentPage(pageNumber);
+   };
+
   //Atualiza a lista
   useEffect(() => {
     findRequests();
@@ -142,7 +154,7 @@ const Solicitacoes = () => {
           setValue={setSearchText}
           setFilterVisible={setFilterVisible}
         />
-        <table>
+        <table className="mb-3">
           <thead>
             <tr>
               <th>ID</th>
@@ -152,23 +164,14 @@ const Solicitacoes = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRequests &&
-              filteredRequests?.map(
-                (r) =>
-                  (r.nomesolicitacao
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    r.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
+             {currentItems &&
+              currentItems.map((r) => (
                     <tr key={r.id}>
                       <td>{r.id}</td>
                       <td>{r.nomesolicitacao}</td>
                       <td>{new Date(r.data).toLocaleDateString()}</td>
                       <td>
-                        <EditButton
+                        <EditButton className="mb-2"
                           onClick={() => {
                             setSelectedRequest(r);
                             setIsUpdated(true);
@@ -196,6 +199,31 @@ const Solicitacoes = () => {
             )}
           </tbody>
         </table>
+        <div>
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            />
+            {Array.from({
+              length: Math.ceil(filteredRequests.length / itemsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => paginate(currentPage + 1)}
+              disabled={
+                currentPage === Math.ceil(filteredRequests.length / itemsPerPage)
+              }
+            />
+          </Pagination>
+        </div>
         <Button
           className="create_button"
           onClick={() => {
