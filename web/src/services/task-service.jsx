@@ -4,14 +4,14 @@ import { api } from "./api";
 //Criando tarefas
 export async function createTasks(data) {
   const accessToken = sessionStorage.getItem("token");
-  const gestor = JSON.parse(sessionStorage.getItem("$gestao_policial$gestor"));
   const result = await api.post(
     "/tarefas",
     {
       nometarefa: data.taskName,
       prazo: data.taskDate,
+      descricao: data.taskDescription,
       policial: data.taskCop,
-      gestor_id: gestor.id,
+   
     },
     {
       headers: {
@@ -36,14 +36,14 @@ export async function getTasks() {
 //Atualizando tarefas
 export async function updateTasks(data) {
   const accessToken = sessionStorage.getItem("token");
-  const gestor = JSON.parse(sessionStorage.getItem("$gestao_policial$gestor"));
   const result = await api.put(
     `/tarefas/${data.taskId}`,
     {
       nometarefa: data.taskName,
       prazo: data.taskDate,
+      descricao: data.taskDescription,
       policial: data.taskCop,
-      gestor_id: gestor.id,
+    
     },
     {
       headers: {

@@ -167,10 +167,10 @@ const User = () => {
               >
                 <option>Selecione sua organização</option>
                 <option selected={user.organizacao === "Policial militar"}>
-                  Policial militar
+                  Policia-Militar
                 </option>
                 <option selected={user.organizacao === "Policial civil"}>
-                  Policial civil
+                  Policia-Civil
                 </option>
                 <option selected={user.organizacao === "Politec"}>
                   Politec
@@ -193,7 +193,7 @@ const User = () => {
                 placeholder="Insira sua senha"
                 required={true}
                 name="senha"
-                defaultValue={user.senha}
+                defaultValue= "12345678910"
                 onChange={(e) => setSenha(e.target.value)}
               />
             </Col>

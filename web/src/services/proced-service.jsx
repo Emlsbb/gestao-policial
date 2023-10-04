@@ -36,7 +36,7 @@ export async function getProced() {
 export async function updateProced(data) {
     const accessToken = sessionStorage.getItem("token");
     const result = await api.put(
-        // eslint-disable-next-line no-undef
+
         `/procedimentos/${data.procedureId}`,
         {
             nomeprocedimento: data.procedureName,

@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button, Modal, Form, Pagination } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 //Requisitando componentes
 import { Sidebar } from "../../components/Sidebar";
@@ -10,37 +11,39 @@ import Background from "../../components/background";
 import SearchBox from "../../components/SearchBox";
 import Filter from "../../components/Filter";
 import User from "../../components/User";
-import backgroundImage from "../../assets/background.jpg";
+import backgroundImage from "../../assets/backgroundIII.jpg";
 import { Container, EditButton, DeleteButton } from "./styles";
 
 //Importando funções do service
 import {
   createTasks,
-  deleteTasks,
   getTasks,
   updateTasks,
+  deleteTasks,
 } from "../../services/task-service";
+
 
 //Auxiliares
 const Tarefas = () => {
   const [tasks, setTasks] = useState([]);
   const [filteredTasks, setFilteredTasks] = useState([]);
-  const [searchText, setSearchText] = useState("");
   const [isCreated, setIsCreated] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [selectedTask, setSelectedTask] = useState({});
   const [taskName, setTaskName] = useState("");
   const [taskDate, setTaskDate] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
   const [taskCop, setTaskCop] = useState("");
-  const [selectedTask, setSelectedTask] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  console.log(useForm)
-  console.log(errors)
 
   //Cria tarefa
   async function addTask(data) {
@@ -54,10 +57,12 @@ const Tarefas = () => {
       await findTasks();
 
       setTaskName("");
-      setTaskDate(null);
+      setTaskDate("");
       setTaskCop("");
+      toast.success("Tarefa criada com sucesso")
     } catch (error) {
-      console.error(error);
+      toast.error("Erro ao criar tarefa")
+
     }
   }
 
@@ -76,6 +81,7 @@ const Tarefas = () => {
         taskId: selectedTask.id,
         taskName: taskName || selectedTask.nometarefa,
         taskDate: taskDate || selectedTask.prazo,
+        taskDescription: taskDescription || selectedTask.descricao,
         taskCop: taskCop || selectedTask.policial,
       };
       await updateTasks(data);
@@ -84,9 +90,12 @@ const Tarefas = () => {
 
       setSelectedTask({});
       setTaskName("");
-      setTaskDate(null);
+      setTaskDate("");
+      setTaskDescription("");
       setTaskCop("");
+      toast.success("Tarefa salva com sucesso")
     } catch (error) {
+      toast.error("Erro ao editar tarefa")
       console.error(error);
     }
   }
@@ -100,7 +109,9 @@ const Tarefas = () => {
 
       await deleteTasks(data);
       await findTasks();
+      toast.success("Tarefa removida com sucesso")
     } catch (error) {
+      toast.error("Erro ao remover tarefa")
       console.log(error);
     }
   }
@@ -121,6 +132,16 @@ const Tarefas = () => {
     findTasks();
   }, []);
 
+  // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Função para mudar a página atual
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <>
       <Sidebar />
@@ -132,7 +153,7 @@ const Tarefas = () => {
           setValue={setSearchText}
           setFilterVisible={setFilterVisible}
         />
-        <table>
+        <table className="mb-3">
           <thead>
             <tr>
               <th>ID</th>
@@ -142,23 +163,14 @@ const Tarefas = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTasks &&
-              filteredTasks?.map(
-                (s) =>
-                  (s.nometarefa
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    s.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
+          {currentItems &&
+              currentItems.map((s) => (
                     <tr key={s.id}>
                       <td>{s.id}</td>
                       <td>{s.nometarefa}</td>
                       <td>{new Date(s.prazo).toLocaleDateString()}</td>
                       <td>
-                        <EditButton
+                        <EditButton className="mb-2"
                           onClick={() => {
                             setSelectedTask(s);
                             setIsUpdated(true);
@@ -186,12 +198,38 @@ const Tarefas = () => {
             )}
           </tbody>
         </table>
+        <div>
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+            />
+            {Array.from({
+              length: Math.ceil(filteredTasks.length / itemsPerPage),
+            }).map((_, index) => (
+              <Pagination.Item
+                key={index}
+                active={index + 1 === currentPage}
+                onClick={() => paginate(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => paginate(currentPage + 1)}
+              disabled={
+                currentPage === Math.ceil(filteredTasks.length / itemsPerPage)
+              }
+            />
+          </Pagination>
+        </div>
         <Button
           className="create_button"
           onClick={() => {
             setTaskName("");
-            setTaskDate(null);
+            setTaskDate("");
             setTaskCop("");
+            setTaskDescription(""); 
             setSelectedTask({});
             setIsCreated(true);
           }}
@@ -243,6 +281,24 @@ const Tarefas = () => {
                 })}
               />
 
+              <Input
+                className="mb-3"
+                type="text"
+                label="Descrição da tarefa"
+                placeholder="Preencha a descrição da tarefa"
+                required={true}
+                name="taskDescription"
+                error={errors.descricao}
+                defaultValue={selectedTask.descricao?.split("T")[0]}
+                onChange={(e) => setTaskDate(e.target.value)}
+                validations={register("taskDescription", {
+                  required: {
+                    value: true,
+                    message: "A descrição da tarefa é obrigatória.",
+                  },
+                })}
+              />
+
               <Form.Select
                 className="mb-3"
                 title="Selecione o policial"
@@ -277,7 +333,9 @@ const Tarefas = () => {
 
         <Modal show={isUpdated} onHide={() => setIsUpdated(false)}>
           <Modal.Header>
-            <Modal.Title>Editar tarefa: {selectedTask?.nometarefa}</Modal.Title>
+            <Modal.Title>
+              Editar tarefa: {selectedTask?.id}
+            </Modal.Title>
           </Modal.Header>
           <Form
             noValidate
@@ -305,6 +363,18 @@ const Tarefas = () => {
                 name="taskDate"
                 error={errors.date}
                 defaultValue={selectedTask.prazo?.split("T")[0]}
+                onChange={(e) => setTaskDate(e.target.value)}
+              />
+
+              <Input
+                className="mb-3"
+                type="text"
+                label="Descrição da tarefa"
+                placeholder="Preencha a descrição da tarefa"
+                required={true}
+                name="taskDescription"
+                error={errors.date}
+                defaultValue={selectedTask.descricao?.split("T")[0]}
                 onChange={(e) => setTaskDate(e.target.value)}
               />
 

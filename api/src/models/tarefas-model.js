@@ -5,6 +5,7 @@ class TarefaModel extends Model {
         super.init({
             nometarefa: DataTypes.STRING,
             prazo: DataTypes.DATE,
+            descricao: DataTypes.STRING,
             policial: DataTypes.STRING,
             gestor_id: DataTypes.INTEGER,
            

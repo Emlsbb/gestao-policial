@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { Sidebar } from "../../components/Sidebar";
 import Background from "../../components/background";
 import User from "../../components/User";
-import backgroundImage from "../../assets/background.jpg";
+import backgroundImage from "../../assets/backgroundIII.jpg";
 import { index } from "../../services/dashboard-service";
 import { Container } from "./styles";
 

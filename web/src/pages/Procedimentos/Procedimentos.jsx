@@ -11,7 +11,7 @@ import Background from "../../components/background";
 import SearchBox from "../../components/SearchBox";
 import Filter from "../../components/Filter";
 import User from "../../components/User";
-import backgroundImage from "../../assets/background.jpg";
+import backgroundImage from "../../assets/backgroundIII.jpg";
 import {
   Container,
   EditButton,
@@ -362,7 +362,7 @@ const Procedimentos = () => {
               <Input
                 className="mb-3"
                 type="date"
-                label="Data da procedimento"
+                label="Data do procedimento"
                 placeholder="Preencha a data da procedimento"
                 required={true}
                 name="procedureDate"

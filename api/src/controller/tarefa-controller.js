@@ -4,10 +4,11 @@ const { TarefaModel } = require("../models/tarefas-model");
 class TarefaController {
 
       async create(req, res) {
-            const { nometarefa, prazo, policial, gestor_id } = req.body;
+            const { nometarefa, prazo, descricao, policial, gestor_id } = req.body;
             const tarefa = await TarefaModel.create({
                   nometarefa,
                   prazo,
+                  descricao,
                   policial,
                   gestor_id,
             });
@@ -21,11 +22,12 @@ class TarefaController {
 
       async update(req, res) {
             const { id } = req.params;
-            const { nometarefa, prazo, policial, gestor_id } = req.body;
+            const { nometarefa, prazo, descricao, policial, gestor_id } = req.body;
             TarefaModel.update(
                   {
                         nometarefa,
                         prazo,
+                        descricao,
                         policial,
                         gestor_id,
                   },
