@@ -18,7 +18,6 @@ const User = () => {
   const [email, setEmail] = useState();
   const [organizacao, setOrganizacao] = useState();
   const [visible, setVisible] = useState(false);
-  const [orgChangeCount, setOrgChangeCount] = useState(0); // Contador de mudanças de organização
   const { handleSubmit } = useForm();
 
   // Pega usuário
@@ -58,20 +57,6 @@ const User = () => {
     getUser();
     console.log(user);
   }, []);
-
-  // Função para lidar com a mudança na organização
-  async function handleOrgChange(e) {
-    try {
-      if (orgChangeCount < 3) {
-        setOrganizacao(e.target.value);
-        setOrgChangeCount(orgChangeCount + 1);
-      }
-      toast.error("Você atingiu o limite de mudanças de organização");
-    } catch (error) {
-      console.log(error);
-      toast.error("Falha ao salvar usuário");
-    }
-  }
 
   async function saveUser() {
     try {
@@ -162,14 +147,15 @@ const User = () => {
                 required={true}
                 name="organizacao"
                 aria-label="Selecione sua organização"
-                onChange={handleOrgChange}
-                value={organizacao}
+                onChange={(e) => {
+                  setOrganizacao(e.target.value);
+                }}
               >
                 <option>Selecione sua organização</option>
-                <option selected={user.organizacao === "Policial militar"}>
+                <option selected={user.organizacao === "Policia-Militar"}>
                   Policia-Militar
                 </option>
-                <option selected={user.organizacao === "Policial civil"}>
+                <option selected={user.organizacao === "Policia-Civil"}>
                   Policia-Civil
                 </option>
                 <option selected={user.organizacao === "Politec"}>
@@ -193,7 +179,7 @@ const User = () => {
                 placeholder="Insira sua senha"
                 required={true}
                 name="senha"
-                defaultValue= "12345678910"
+                defaultValue= "12345678"
                 onChange={(e) => setSenha(e.target.value)}
               />
             </Col>

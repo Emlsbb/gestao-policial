@@ -23,13 +23,13 @@ class GestorController {
         !organizacao
       )
         return httpHelper.badRequest(`
-                Nome, senha, sexo, data de nascimento, endereco, email, 
-                e organização são campos obrigatórios
-                `);
-
+                  Nome, senha, sexo, data de nascimento, endereco, email, 
+                  e organizacao são campos obrigatórios
+                  `);
+  
       const gestorExist = await GestorModel.findOne({ where: { email } });
       if (gestorExist) return httpHelper.badRequest("E-mail já cadastrado!");
-
+  
       const dataNascimento = new Date(data_nasc);
       const hoje = new Date();
       const idade = hoje.getFullYear() - dataNascimento.getFullYear();
@@ -42,7 +42,13 @@ class GestorController {
       ) {
         return httpHelper.badRequest("Você deve ser maior de idade para se cadastrar");
       }
-
+  
+      const senhaPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8}$/;
+  
+      if (!senha.match(senhaPattern)) {
+        return httpHelper.badRequest("A senha deve ser composta por números e letras, ter 8 caracteres e ter uma letra maiúscula");
+      }
+  
       const senhaHashed = await bcrypt.hash(senha, Number(process.env.SALT));
       const gestor = await GestorModel.create({
         nome,
@@ -60,12 +66,13 @@ class GestorController {
         process.env.TOKEN_SECRET,
         { expiresIn: process.env.TOKEN_EXPIRES_IN }
       );
-      return httpHelper.created({ message: "Token do gestor:", accessToken });
+      return httpHelper.created({ message: "Token do gestor:", accessToken , gestor: gestor});
     } catch (error) {
       return httpHelper.internalError(error);
     }
   }
-
+  
+  
   async login(req, res) {
     const httpHelper = new HttpHelper(res);
     try {

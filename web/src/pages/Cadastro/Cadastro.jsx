@@ -29,6 +29,8 @@ export const Cadastro = () => {
         sexo,
         organizacao: org,
       });
+      
+
       setResult(user);
       navigate('/procedimentos');
     } catch (error) {
