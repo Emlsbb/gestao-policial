@@ -36,8 +36,8 @@ const Tarefas = () => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskCop, setTaskCop] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const itemsPerPage = 3;
 
   const {
     handleSubmit,
@@ -132,15 +132,15 @@ const Tarefas = () => {
     findTasks();
   }, []);
 
-  // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
+  // // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
+  // const indexOfLastItem = currentPage * itemsPerPage;
+  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  // const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Função para mudar a página atual
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  // // Função para mudar a página atual
+  // const paginate = (pageNumber) => {
+  //   setCurrentPage(pageNumber);
+  // };
 
   return (
     <>
@@ -163,7 +163,7 @@ const Tarefas = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredTasks &&
+          {filteredTasks &&
               filteredTasks?.map(
                 (s) =>
                   (s.nometarefa
@@ -179,7 +179,7 @@ const Tarefas = () => {
                       <td>{s.nometarefa}</td>
                       <td>{new Date(s.prazo).toLocaleDateString()}</td>
                       <td>
-                        <EditButton
+                        <EditButton className="mb-2"
                           onClick={() => {
                             setSelectedTask(s);
                             setIsUpdated(true);
@@ -198,8 +198,16 @@ const Tarefas = () => {
                     </tr>
                   )
               )}
-
-            {filteredTasks &&
+            {filteredTasks && filteredTasks.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center no_requests">
+                  Não existe nenhuma tarefa
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+        {/* {filteredTasks &&
               filteredTasks?.filter(
                 (s) =>
                   s.nometarefa
@@ -213,19 +221,17 @@ const Tarefas = () => {
               ).length === 0 && (
                 <tr>
                 <td colSpan="4" className="text-center no_requests">
+                  Não existe nenhuma tarefa
                   Não existe nehuma tarefa
                 </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </tr> */}
         <Button
           className="create_button"
           onClick={() => {
             setTaskName("");
             setTaskDate("");
             setTaskCop("");
-            setTaskDescription("");
+            setTaskDescription(""); 
             setSelectedTask({});
             setIsCreated(true);
           }}
@@ -306,7 +312,7 @@ const Tarefas = () => {
                   setTaskCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option selected>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -385,7 +391,7 @@ const Tarefas = () => {
                   setTaskCop(e.target.value);
                 }}
               >
-                <option >Selecione o policial</option>
+                <option>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

@@ -72,6 +72,17 @@ const Solicitacoes = () => {
 
     setRequests(result.data);
     setFilteredRequests(result.data);
+
+    const filtered = result.data.filter((r) =>
+      r.nomesolicitacao
+        .trim()
+        .toLowerCase()
+        .includes(searchText.trim().toLowerCase()) ||
+      r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase())
+    );
+
+    setFilteredRequests(filtered);
+    setCurrentPage(1); 
   }
 
   //Edita solicitação
@@ -143,6 +154,16 @@ const Solicitacoes = () => {
     findRequests();
   }, []);
 
+  useEffect(() => {
+    findRequests();
+  }, [searchText]); // Execute findProceds sempre que o texto de pesquisa mudar
+
+  const totalItems = filteredRequests.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   return (
     <>
       <Sidebar />
@@ -164,54 +185,45 @@ const Solicitacoes = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredRequests &&
-              filteredRequests?.map(
-                (r) =>
-                  (r.nomesolicitacao
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    r.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
-                    <tr key={r.id}>
-                      <td>{r.id}</td>
-                      <td>{r.nomesolicitacao}</td>
-                      <td>{new Date(r.data).toLocaleDateString()}</td>
-                      <td>
-                        <EditButton
-                          onClick={() => {
-                            setSelectedRequest(r);
-                            setIsUpdated(true);
-                          }}
-                        >
-                          Editar
-                        </EditButton>
-                        <DeleteButton
-                          onClick={() => {
-                            removeRequest(r);
-                          }}
-                        >
-                          Deletar
-                        </DeleteButton>
-                      </td>
-                    </tr>
-                  )
-              )}
-
-            {filteredRequests &&
-              filteredRequests?.filter(
-                (r) =>
-                  r.nomesolicitacao
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
+            {filteredRequests
+              ?.slice(startIndex, endIndex)
+              .map((r) =>
+                r.nomesolicitacao
+                  .trim()
+                  .toLowerCase()
+                  .includes(searchText.trim().toLocaleLowerCase()) ||
                   r.policial
                     .trim()
                     .toLowerCase()
-                    .includes(searchText.trim().toLowerCase())
-              ).length === 0 && (
+                    .includes(searchText.trim().toLowerCase()) ||
+                  r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase()) ? (
+                  <tr key={r.id}>
+                    <td>{r.id}</td>
+                    <td>{r.nomesolicitacao}</td>
+                    <td>{new Date(r.data).toLocaleDateString()}</td>
+                    <td>
+                      <EditButton
+                        onClick={() => {
+                          setSelectedRequest(r);
+                          setIsUpdated(true);
+                        }}
+                      >
+                        Editar
+                      </EditButton>
+                      <DeleteButton
+                        onClick={() => {
+                          removeRequest(r);
+                        }}
+                      >
+                        Deletar
+                      </DeleteButton>
+                    </td>
+                  </tr>
+                ) : null
+              )}
+
+            {filteredRequests
+              ?.length === 0 && (
                 <tr>
                   <td colSpan="4" className="text-center no_requests">
                     Não existe nenhuma solicitação
@@ -220,6 +232,27 @@ const Solicitacoes = () => {
               )}
           </tbody>
         </table>
+        <div>
+        <Pagination className="justify-content-end mb-2">
+          <Pagination.Prev
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+        </div>
         <Button
           className="create_button"
           onClick={() => {

@@ -61,6 +61,7 @@ const Procedimentos = () => {
 
       setProcedureName("");
       setProcedureDate("");
+      console.log("set:",setProcedureDate)
       setProcedureCop("");
       toast.success("Procedimento criado com sucesso");
     } catch (error) {
@@ -75,7 +76,7 @@ const Procedimentos = () => {
 
     setProceds(result.data);
     setFilteredProceds(result.data);
-    // Filtra os procedimentos com base na barra de pesquisa
+
     const filtered = result.data.filter((r) =>
       r.nomeprocedimento
         .trim()

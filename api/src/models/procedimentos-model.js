@@ -4,7 +4,7 @@ class ProcedimentoModel extends Model {
     static init(sequelize) {
         super.init({
             nomeprocedimento: DataTypes.STRING,
-            data: DataTypes.DATE,
+            data: DataTypes.DATEONLY,
             descricao: DataTypes.STRING,
             policial: DataTypes.STRING,
             gestor_id: DataTypes.INTEGER,
