@@ -293,7 +293,7 @@ const Procedimentos = () => {
                 placeholder="Preencha a descrição do procedimento"
                 required={true}
                 name="procedureDescription"
-                error={errors.date}
+                error={errors.description}
                 defaultValue={selectedProcedure.descricao?.split("T")[0]}
                 onChange={(e) => setProcedureDate(e.target.value)}
                 validations={register("procedureDescription", {
@@ -315,7 +315,7 @@ const Procedimentos = () => {
                   setProcedureCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option selected disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -378,7 +378,7 @@ const Procedimentos = () => {
                 placeholder="Preencha a descrição do procedimento"
                 required={true}
                 name="procedureDescription"
-                error={errors.date}
+                error={errors.description}
                 defaultValue={selectedProcedure.descricao?.split("T")[0]}
                 onChange={(e) => setProcedureDate(e.target.value)}
               />
@@ -394,7 +394,7 @@ const Procedimentos = () => {
                   setProcedureCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option selected disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

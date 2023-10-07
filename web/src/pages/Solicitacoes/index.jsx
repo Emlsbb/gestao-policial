@@ -311,7 +311,7 @@ const Solicitacoes = () => {
                   setRequestCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option selected disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -388,7 +388,7 @@ const Solicitacoes = () => {
                   setRequestCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option selected disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

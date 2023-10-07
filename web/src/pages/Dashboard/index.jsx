@@ -16,10 +16,10 @@ const Dashboard = () => {
       const { data } = await index();
 
       const toData = [
-        ["Type", "Count"],
-        ["Procedimentos", data.proceduresCount],
-        ["Tarefas", data.tasksCount],
-        ["Solicitações", data.requestsCount],
+        ["Type", "Count", { role: "style" }],
+        ["Procedimentos", data.proceduresCount, "#3366CB"],
+        ["Tarefas", data.tasksCount, "#DC3911"],
+        ["Solicitações", data.requestsCount, "#FF9900"],
       ];
 
       setData(toData);
@@ -47,8 +47,26 @@ const Dashboard = () => {
             height="400px"
             data={data}
             options={{
-              backgroundColor: "transparent",
-              pieHole: 0.4,
+              backgroundColor: "grey",
+              pieHole: 0,
+              titleTextStyle: {
+                color: "white", // Altere para a cor branca
+              },
+            }}
+          />
+        </div>
+
+        <div className="bar_chart">
+          <Chart
+            chartType="BarChart"
+            width="100%"
+            height="400px"
+            data={data}
+            options={{
+              backgroundColor: "grey",
+              titleTextStyle: {
+                color: "white", // Altere para a cor branca
+              },
             }}
           />
         </div>

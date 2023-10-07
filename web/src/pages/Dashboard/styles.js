@@ -5,23 +5,18 @@ export const Container = styled.div`
   margin-top: 2rem;
   margin-left: 375px;
   margin-bottom: 2rem;
-
   border-radius: 0.5rem;
-
   padding: 2rem;
-
   background-color: #363636;
-
   position: relative;
 
   .title {
     color: white;
-
     font-size: 1.5rem;
-
     background: #929292;
     border-radius: 0.5rem;
     padding: 2rem;
+    font-family: 'Comfortaa', sans-serif;
   }
 
   .pie_chart {
@@ -29,4 +24,6 @@ export const Container = styled.div`
     border-radius: 0.5rem;
     margin-top: 1rem;
   }
+
+  
 `;

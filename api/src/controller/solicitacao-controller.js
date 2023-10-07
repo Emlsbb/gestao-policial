@@ -5,7 +5,13 @@ class SolicitacaoController {
 
     async create(req, res) {
         const { nomesolicitacao, data, descricao, policial, gestor_id } = req.body
-        const solicitacao = await SolicitacaoModel.create({ nomesolicitacao, data, descricao, policial, gestor_id });
+        const solicitacao = await SolicitacaoModel.create({
+             nomesolicitacao, 
+             data, 
+             descricao, 
+             policial, 
+             gestor_id 
+            });
         return res.json(solicitacao)
     }
 
@@ -18,7 +24,11 @@ class SolicitacaoController {
         const { id } = req.params
         const { nomesolicitacao, data, descricao, policial, gestor_id } = req.body
         SolicitacaoModel.update({
-            nomesolicitacao, data, descricao, policial, gestor_id
+            nomesolicitacao, 
+            data, 
+            descricao,
+            policial,
+            gestor_id
         },
             {
                 where: { id }

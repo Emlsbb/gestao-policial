@@ -1,0 +1,32 @@
+.form_container {
+    width: 32%;
+   
+   }
+   
+   @media screen and (max-width: 1000px){ 
+       .form_container {
+           width: 45%;
+       }
+       
+   }
+   
+   @media screen and (max-width: 700px){ 
+       .form_container {
+           width: 45%;
+       }
+       
+   }
+   
+   @media (max-width: 575px) {
+       .template {
+           padding: 0.8rem; 
+       }
+   
+       .form_container {
+           padding: 85%; 
+       }
+   
+       .mb-2 {
+           margin-bottom: 0.3rem; /* Reduz o espaço entre os campos */
+       }
+   }

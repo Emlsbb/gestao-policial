@@ -16,7 +16,7 @@ module.exports = {
 
         policial: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
         },
 
         gestor_id: {
@@ -45,7 +45,7 @@ module.exports = {
 
         descricao: {
           type: Sequelize.STRING,
-          allowNull: true,
+          allowNull: false,
 
 
         },

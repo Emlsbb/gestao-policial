@@ -12,7 +12,21 @@
 
 @media screen and (max-width: 700px){ 
     .form_container {
-        width: 65%;
+        width: 45%;
     }
     
+}
+
+@media (max-width: 400px) {
+    .template {
+        padding: 10px; 
+    }
+
+    .form_container {
+        padding: 85%; 
+    }
+
+    .mb-2 {
+        margin-bottom: 0.3rem; /* Reduz o espaço entre os campos */
+    }
 }

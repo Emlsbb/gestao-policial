@@ -118,7 +118,7 @@ const User = () => {
                   setSexo(e.target.value);
                 }}
               >
-                <option>Selecione seu sexo</option>
+                <option selected disabled>Selecione seu sexo</option>
                 <option selected={user.sexo === "Masculino"}>Masculino</option>
                 <option selected={user.sexo === "Feminino"}>Feminino</option>
               </Form.Select>
@@ -151,7 +151,7 @@ const User = () => {
                   setOrganizacao(e.target.value);
                 }}
               >
-                <option>Selecione sua organização</option>
+                <option selected disabled>Selecione sua organização</option>
                 <option selected={user.organizacao === "Policia-Militar"}>
                   Policia-Militar
                 </option>
