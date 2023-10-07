@@ -38,6 +38,7 @@ const Solicitacoes = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const {
     handleSubmit,
@@ -82,7 +83,7 @@ const Solicitacoes = () => {
     );
 
     setFilteredRequests(filtered);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   }
 
   //Edita solicitação
@@ -126,6 +127,24 @@ const Solicitacoes = () => {
       console.log(error);
     }
   }
+
+  //Lógica para confirmação do excluir
+  const handleDeleteConfirmation = (request) => {
+    setSelectedRequest(request);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await removeRequest(selectedRequest);
+      setShowDeleteConfirmation(false);
+      toast.success("Solicitação removida com sucesso");
+    } catch (error) {
+      toast.error("Erro ao remover solicitação");
+      console.error(error);
+    }
+  };
+
 
   //Filtra por período
   function filter(initialDate, finalDate) {
@@ -210,11 +229,7 @@ const Solicitacoes = () => {
                       >
                         Editar
                       </EditButton>
-                      <DeleteButton
-                        onClick={() => {
-                          removeRequest(r);
-                        }}
-                      >
+                      <DeleteButton onClick={() => handleDeleteConfirmation(r)}>
                         Deletar
                       </DeleteButton>
                     </td>
@@ -233,25 +248,25 @@ const Solicitacoes = () => {
           </tbody>
         </table>
         <div>
-        <Pagination className="justify-content-end mb-2">
-          <Pagination.Prev
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
         </div>
         <Button
           className="create_button"
@@ -436,6 +451,23 @@ const Solicitacoes = () => {
               </Button>
             </Modal.Footer>
           </Form>
+        </Modal>
+        {/* Modal para confirmar delete */}
+        <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmar Exclusão</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Tem certeza de que deseja excluir o procedimento {selectedRequest?.id}?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={confirmDelete}>
+              Confirmar Exclusão
+            </Button>
+          </Modal.Footer>
         </Modal>
         <Filter
           visible={filterVisible}

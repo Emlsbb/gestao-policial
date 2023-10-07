@@ -41,6 +41,7 @@ const Procedimentos = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const {
     handleSubmit,
@@ -61,7 +62,7 @@ const Procedimentos = () => {
 
       setProcedureName("");
       setProcedureDate("");
-      console.log("set:",setProcedureDate)
+      console.log("set:", setProcedureDate)
       setProcedureCop("");
       toast.success("Procedimento criado com sucesso");
     } catch (error) {
@@ -132,6 +133,22 @@ const Procedimentos = () => {
     }
   }
 
+  const handleDeleteConfirmation = (procedure) => {
+    setSelectedProcedure(procedure);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await removeProced(selectedProcedure);
+      setShowDeleteConfirmation(false);
+      toast.success("Procedimento removido com sucesso");
+    } catch (error) {
+      toast.error("Erro ao remover procedimento");
+      console.error(error);
+    }
+  };
+
   // Filtra por período
   function filter(initialDate, finalDate) {
     if (initialDate && finalDate) {
@@ -187,7 +204,7 @@ const Procedimentos = () => {
                   .trim()
                   .toLowerCase()
                   .includes(searchText.trim().toLowerCase()) ||
-                r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase()) ? (
+                  r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase()) ? (
                   <tr key={r.id}>
                     <td>{r.id}</td>
                     <td>{r.nomeprocedimento}</td>
@@ -201,42 +218,43 @@ const Procedimentos = () => {
                       >
                         Editar
                       </EditButton>
-                      <DeleteButton onClick={() => removeProced(r)}>Deletar</DeleteButton>
+                      <DeleteButton onClick={() => handleDeleteConfirmation(r)}>
+                        Deletar
+                      </DeleteButton>
                     </td>
                   </tr>
                 ) : null
               )}
             {filteredProceds
               ?.length === 0 && (
-              <tr>
-                <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhum procedimento
-                </td>
-              </tr>
-            )}
+                <tr>
+                  <td colSpan="4" className="text-center no_requests">
+                    Não existe nenhum procedimento
+                  </td>
+                </tr>
+              )}
           </tbody>
         </table>
         <div>
-        <Pagination className="justify-content-end mb-2">
-          <Pagination.Prev
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
-
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
         </div>
         <Button
           className="create_button"
@@ -426,11 +444,28 @@ const Procedimentos = () => {
             </Modal.Footer>
           </Form>
         </Modal>
+        <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Tem certeza de que deseja excluir o procedimento {selectedProcedure?.id}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Confirmar Exclusão
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <Filter
           visible={filterVisible}
           setVisible={setFilterVisible}
           filterFunction={filter}
         />
+        
         <User />
       </Container>
     </>

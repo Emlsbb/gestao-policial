@@ -38,6 +38,7 @@ const Tarefas = () => {
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   const {
     handleSubmit,
@@ -74,15 +75,15 @@ const Tarefas = () => {
     setFilteredTasks(result.data);
 
     const filtered = result.data.filter((s) =>
-    s.nometarefa
-      .trim()
-      .toLowerCase()
-      .includes(searchText.trim().toLowerCase()) ||
-    s.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase())
-  );
+      s.nometarefa
+        .trim()
+        .toLowerCase()
+        .includes(searchText.trim().toLowerCase()) ||
+      s.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase())
+    );
 
-  setFilteredTasks(filtered);
-  setCurrentPage(1); // Volte para a primeira página ao pesquisar
+    setFilteredTasks(filtered);
+    setCurrentPage(1); // Volte para a primeira página ao pesquisar
   }
 
   //Edita tarefa
@@ -127,6 +128,23 @@ const Tarefas = () => {
     }
   }
 
+  //Lógica para confirmação do excluir
+  const handleDeleteConfirmation = (tasks) => {
+    setSelectedTask(tasks);
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await removeTask(selectedTask);
+      setShowDeleteConfirmation(false);
+      toast.success("Tarefa removida com sucesso");
+    } catch (error) {
+      toast.error("Erro ao remover tarefa");
+      console.error(error);
+    }
+  };
+
   function filter(initialDate, finalDate) {
     if (initialDate && finalDate) {
       var items = tasks.filter((a) => {
@@ -145,7 +163,7 @@ const Tarefas = () => {
 
   useEffect(() => {
     findTasks();
-  }, [searchText]); 
+  }, [searchText]);
 
   const totalItems = filteredTasks.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -174,39 +192,35 @@ const Tarefas = () => {
             </tr>
           </thead>
           <tbody>
-          {filteredTasks 
+            {filteredTasks
               ?.slice(startIndex, endIndex)
-                .map((s) =>
-                  (s.nometarefa
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLowerCase()) ||
-                    s.policial.trim().toLowerCase().includes(searchText.trim()).toLowerCase())? (
-                    <tr key={s.id}>
-                      <td>{s.id}</td>
-                      <td>{s.nometarefa}</td>
-                      <td>{new Date(s.prazo).toLocaleDateString()}</td>
-                      <td>
-                        <EditButton className="mb-2"
-                          onClick={() => {
-                            setSelectedTask(s);
-                            setIsUpdated(true);
-                          }}
-                        >
-                          Editar
-                        </EditButton>
-                        <DeleteButton
-                          onClick={() => {
-                            removeTask(s);
-                          }}
-                        >
-                          Deletar
-                        </DeleteButton>
-                      </td>
-                    </tr>
-                  ): null
+              .map((s) =>
+                (s.nometarefa
+                  .trim()
+                  .toLowerCase()
+                  .includes(searchText.trim().toLowerCase()) ||
+                  s.policial.trim().toLowerCase().includes(searchText.trim()).toLowerCase()) ? (
+                  <tr key={s.id}>
+                    <td>{s.id}</td>
+                    <td>{s.nometarefa}</td>
+                    <td>{new Date(s.prazo).toLocaleDateString()}</td>
+                    <td>
+                      <EditButton className="mb-2"
+                        onClick={() => {
+                          setSelectedTask(s);
+                          setIsUpdated(true);
+                        }}
+                      >
+                        Editar
+                      </EditButton>
+                      <DeleteButton onClick={() => handleDeleteConfirmation(s)}>
+                        Deletar
+                      </DeleteButton>
+                    </td>
+                  </tr>
+                ) : null
               )}
-            {filteredTasks ?.length === 0 && (
+            {filteredTasks?.length === 0 && (
               <tr>
                 <td colSpan="4" className="text-center no_requests">
                   Não existe nenhuma tarefa
@@ -216,34 +230,34 @@ const Tarefas = () => {
           </tbody>
         </table>
         <div>
-        <Pagination className="justify-content-end mb-2">
-          <Pagination.Prev
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          />
-          {Array.from({ length: totalPages }, (_, index) => (
-            <Pagination.Item
-              key={index + 1}
-              active={index + 1 === currentPage}
-              onClick={() => setCurrentPage(index + 1)}
-            >
-              {index + 1}
-            </Pagination.Item>
-          ))}
-          <Pagination.Next
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          />
-        </Pagination>
+          <Pagination className="justify-content-end mb-2">
+            <Pagination.Prev
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              disabled={currentPage === 1}
+            />
+            {Array.from({ length: totalPages }, (_, index) => (
+              <Pagination.Item
+                key={index + 1}
+                active={index + 1 === currentPage}
+                onClick={() => setCurrentPage(index + 1)}
+              >
+                {index + 1}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              disabled={currentPage === totalPages}
+            />
+          </Pagination>
 
-        </div>      
+        </div>
         <Button
           className="create_button"
           onClick={() => {
             setTaskName("");
             setTaskDate("");
             setTaskCop("");
-            setTaskDescription(""); 
+            setTaskDescription("");
             setSelectedTask({});
             setIsCreated(true);
           }}
@@ -423,6 +437,23 @@ const Tarefas = () => {
             </Modal.Footer>
           </Form>
         </Modal>
+        {/* Modal para confirmar delete */}
+        <Modal show={showDeleteConfirmation} onHide={() => setShowDeleteConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirmar Exclusão</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Tem certeza de que deseja excluir o procedimento {selectedTask?.id}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteConfirmation(false)}>
+            Cancelar
+          </Button>
+          <Button variant="danger" onClick={confirmDelete}>
+            Confirmar Exclusão
+          </Button>
+        </Modal.Footer>
+      </Modal>
         <Filter
           visible={filterVisible}
           setVisible={setFilterVisible}
