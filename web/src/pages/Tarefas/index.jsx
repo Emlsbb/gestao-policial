@@ -36,8 +36,8 @@ const Tarefas = () => {
   const [taskDescription, setTaskDescription] = useState("");
   const [taskCop, setTaskCop] = useState("");
   const [filterVisible, setFilterVisible] = useState(false);
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 3;
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
   const {
     handleSubmit,
@@ -72,6 +72,17 @@ const Tarefas = () => {
 
     setTasks(result.data);
     setFilteredTasks(result.data);
+
+    const filtered = result.data.filter((s) =>
+    s.nometarefa
+      .trim()
+      .toLowerCase()
+      .includes(searchText.trim().toLowerCase()) ||
+    s.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase())
+  );
+
+  setFilteredTasks(filtered);
+  setCurrentPage(1); // Volte para a primeira página ao pesquisar
   }
 
   //Edita tarefa
@@ -132,15 +143,15 @@ const Tarefas = () => {
     findTasks();
   }, []);
 
-  // // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
-  // const indexOfLastItem = currentPage * itemsPerPage;
-  // const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  // const currentItems = filteredTasks.slice(indexOfFirstItem, indexOfLastItem);
+  useEffect(() => {
+    findTasks();
+  }, [searchText]); 
 
-  // // Função para mudar a página atual
-  // const paginate = (pageNumber) => {
-  //   setCurrentPage(pageNumber);
-  // };
+  const totalItems = filteredTasks.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
 
   return (
     <>
@@ -163,17 +174,14 @@ const Tarefas = () => {
             </tr>
           </thead>
           <tbody>
-          {filteredTasks &&
-              filteredTasks?.map(
-                (s) =>
+          {filteredTasks 
+              ?.slice(startIndex, endIndex)
+                .map((s) =>
                   (s.nometarefa
                     .trim()
                     .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    s.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
+                    .includes(searchText.trim().toLowerCase()) ||
+                    s.policial.trim().toLowerCase().includes(searchText.trim()).toLowerCase())? (
                     <tr key={s.id}>
                       <td>{s.id}</td>
                       <td>{s.nometarefa}</td>
@@ -196,9 +204,9 @@ const Tarefas = () => {
                         </DeleteButton>
                       </td>
                     </tr>
-                  )
+                  ): null
               )}
-            {filteredTasks && filteredTasks.length === 0 && (
+            {filteredTasks ?.length === 0 && (
               <tr>
                 <td colSpan="4" className="text-center no_requests">
                   Não existe nenhuma tarefa
@@ -207,24 +215,28 @@ const Tarefas = () => {
             )}
           </tbody>
         </table>
-        {/* {filteredTasks &&
-              filteredTasks?.filter(
-                (s) =>
-                  s.nometarefa
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                  s.policial
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLowerCase())
-              ).length === 0 && (
-                <tr>
-                <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhuma tarefa
-                  Não existe nehuma tarefa
-                </td>
-              </tr> */}
+        <div>
+        <Pagination className="justify-content-end mb-2">
+          <Pagination.Prev
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+
+        </div>      
         <Button
           className="create_button"
           onClick={() => {
@@ -312,7 +324,7 @@ const Tarefas = () => {
                   setTaskCop(e.target.value);
                 }}
               >
-                <option selected>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -375,9 +387,9 @@ const Tarefas = () => {
                 placeholder="Preencha a descrição da tarefa"
                 required={true}
                 name="taskDescription"
-                error={errors.date}
+                error={errors.descricao}
                 defaultValue={selectedTask.descricao?.split("T")[0]}
-                onChange={(e) => setTaskDate(e.target.value)}
+                onChange={(e) => setTaskDescription(e.target.value)}
               />
 
               <Form.Select
@@ -391,7 +403,7 @@ const Tarefas = () => {
                   setTaskCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

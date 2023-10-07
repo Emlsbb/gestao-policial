@@ -340,7 +340,7 @@ const Solicitacoes = () => {
                   setRequestCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -401,9 +401,9 @@ const Solicitacoes = () => {
                 placeholder="Preencha a descrição da solicitação"
                 required={true}
                 name="requestDescription"
-                error={errors.date}
+                error={errors.descricao}
                 defaultValue={selectedRequest.descricao?.split("T")[0]}
-                onChange={(e) => setRequestDate(e.target.value)}
+                onChange={(e) => setRequestDescription(e.target.value)}
               />
 
               <Form.Select
@@ -417,7 +417,7 @@ const Solicitacoes = () => {
                   setRequestCop(e.target.value);
                 }}
               >
-                <option>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

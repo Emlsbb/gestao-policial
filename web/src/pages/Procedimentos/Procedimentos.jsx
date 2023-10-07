@@ -327,7 +327,7 @@ const Procedimentos = () => {
                   setProcedureCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
@@ -390,9 +390,9 @@ const Procedimentos = () => {
                 placeholder="Preencha a descrição do procedimento"
                 required={true}
                 name="procedureDescription"
-                error={errors.description}
+                error={errors.descricao}
                 defaultValue={selectedProcedure.descricao?.split("T")[0]}
-                onChange={(e) => setProcedureDate(e.target.value)}
+                onChange={(e) => setProcedureDescription(e.target.value)}
               />
 
               <Form.Select
@@ -406,7 +406,7 @@ const Procedimentos = () => {
                   setProcedureCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option disabled>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>
