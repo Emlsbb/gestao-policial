@@ -75,6 +75,18 @@ const Procedimentos = () => {
 
     setProceds(result.data);
     setFilteredProceds(result.data);
+    // Filtra os procedimentos com base na barra de pesquisa
+    const filtered = result.data.filter((r) =>
+      r.nomeprocedimento
+        .trim()
+        .toLowerCase()
+        .includes(searchText.trim().toLowerCase()) ||
+      r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase())
+    );
+
+    setFilteredProceds(filtered);
+    setCurrentPage(1); // Volte para a primeira página ao pesquisar
+
   }
 
   // Edita procedimento
@@ -136,41 +148,15 @@ const Procedimentos = () => {
     findProceds();
   }, []);
 
-  // //itens para paginação
-  // const itensPorPagina = 5;
-  // const [paginaAtual, setPaginaAtual] = useState(1);
-  // let totalPaginas;
-  // let filteredTasksExibidas;
+  useEffect(() => {
+    findProceds();
+  }, [searchText]); // Execute findProceds sempre que o texto de pesquisa mudar
 
-  // const indiceInicio = (paginaAtual - 1) * itensPorPagina;
-  // const indiceFim = paginaAtual * itensPorPagina;
+  const totalItems = filteredProceds.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  // if(filteredTasks && filteredTasks.length > 0){
-  //     filteredTasksExibidas = filteredTasks?.slice(indiceInicio, indiceFim);
-  //     totalPaginas = Math.ceil(filteredTasks.length / itensPorPagina);
-  // }else{
-  //     filteredTasksExibidas = 0;
-  //     totalPaginas = 0;
-  // }
-  // const handlePaginaClick = (novaPagina) => {
-  //   setPaginaAtual(novaPagina);
-  // };
-  // const renderNumerosDePagina = () => {
-  //   const numerosDePagina = [];
-  //   for (let pagina = 1; pagina <= totalPaginas; pagina++) {
-  //     numerosDePagina.push(
-  //       <Pagination.Item
-  //         key={pagina}
-  //         active={pagina === paginaAtual}
-  //         onClick={() => handlePaginaClick(pagina)}
-  //       >
-  //         {pagina}
-  //       </Pagination.Item>
-  //     );
-  //   }
-  //   return numerosDePagina;
-  // };
-  //fim de itens para paginação
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
   return (
     <>
@@ -193,61 +179,64 @@ const Procedimentos = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredProceds &&
-              filteredProceds?.map(
-                (r) =>
-                  (r.nomeprocedimento
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                    r.policial
-                      .trim()
-                      .toLowerCase()
-                      .includes(searchText.trim().toLowerCase())) && (
-                    <tr key={r.id}>
-                      <td>{r.id}</td>
-                      <td>{r.nomeprocedimento}</td>
-                      <td>{new Date(r.data).toLocaleDateString()}</td>
-                      <td>
-                        <EditButton
-                          onClick={() => {
-                            setSelectedProcedure(r);
-                            setIsUpdated(true);
-                          }}
-                        >
-                          Editar
-                        </EditButton>
-                        <DeleteButton
-                          onClick={() => {
-                            removeProced(r);
-                          }}
-                        >
-                          Deletar
-                        </DeleteButton>
-                      </td>
-                    </tr>
-                  )
+            {filteredProceds
+              ?.slice(startIndex, endIndex)
+              .map((r) =>
+                r.nomeprocedimento
+                  .trim()
+                  .toLowerCase()
+                  .includes(searchText.trim().toLowerCase()) ||
+                r.policial.trim().toLowerCase().includes(searchText.trim().toLowerCase()) ? (
+                  <tr key={r.id}>
+                    <td>{r.id}</td>
+                    <td>{r.nomeprocedimento}</td>
+                    <td>{new Date(r.data).toLocaleDateString()}</td>
+                    <td>
+                      <EditButton
+                        onClick={() => {
+                          setSelectedProcedure(r);
+                          setIsUpdated(true);
+                        }}
+                      >
+                        Editar
+                      </EditButton>
+                      <DeleteButton onClick={() => removeProced(r)}>Deletar</DeleteButton>
+                    </td>
+                  </tr>
+                ) : null
               )}
             {filteredProceds
-              && filteredProceds?.filter(
-                (r) =>
-                  r.nomeprocedimento
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLocaleLowerCase()) ||
-                  r.policial
-                    .trim()
-                    .toLowerCase()
-                    .includes(searchText.trim().toLowerCase())
-              ).length === 0 && (
-                <tr>
-                  <td colSpan="4" className="text-center no_requests">
-                    Não existe nenhum procedimento
-                  </td>
-                </tr>
-              )}
+              ?.length === 0 && (
+              <tr>
+                <td colSpan="4" className="text-center no_requests">
+                  Não existe nenhum procedimento
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
+        <div>
+        <Pagination className="justify-content-end mb-2">
+          <Pagination.Prev
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+          />
+          {Array.from({ length: totalPages }, (_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              active={index + 1 === currentPage}
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+          <Pagination.Next
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          />
+        </Pagination>
+
+        </div>
         <Button
           className="create_button"
           onClick={() => {
