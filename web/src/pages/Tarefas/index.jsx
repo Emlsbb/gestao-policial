@@ -163,14 +163,23 @@ const Tarefas = () => {
             </tr>
           </thead>
           <tbody>
-          {currentItems &&
-              currentItems.map((s) => (
+            {filteredTasks &&
+              filteredTasks?.map(
+                (s) =>
+                  (s.nometarefa
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                    s.policial
+                      .trim()
+                      .toLowerCase()
+                      .includes(searchText.trim().toLowerCase())) && (
                     <tr key={s.id}>
                       <td>{s.id}</td>
                       <td>{s.nometarefa}</td>
                       <td>{new Date(s.prazo).toLocaleDateString()}</td>
                       <td>
-                        <EditButton className="mb-2"
+                        <EditButton
                           onClick={() => {
                             setSelectedTask(s);
                             setIsUpdated(true);
@@ -189,47 +198,34 @@ const Tarefas = () => {
                     </tr>
                   )
               )}
-            {filteredTasks && filteredTasks.length === 0 && (
-              <tr>
+
+            {filteredTasks &&
+              filteredTasks?.filter(
+                (s) =>
+                  s.nometarefa
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                  s.policial
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLowerCase())
+              ).length === 0 && (
+                <tr>
                 <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhuma tarefa
+                  Não existe nehuma tarefa
                 </td>
               </tr>
             )}
           </tbody>
         </table>
-        <div>
-          <Pagination className="justify-content-end mb-2">
-            <Pagination.Prev
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-            />
-            {Array.from({
-              length: Math.ceil(filteredTasks.length / itemsPerPage),
-            }).map((_, index) => (
-              <Pagination.Item
-                key={index}
-                active={index + 1 === currentPage}
-                onClick={() => paginate(index + 1)}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => paginate(currentPage + 1)}
-              disabled={
-                currentPage === Math.ceil(filteredTasks.length / itemsPerPage)
-              }
-            />
-          </Pagination>
-        </div>
         <Button
           className="create_button"
           onClick={() => {
             setTaskName("");
             setTaskDate("");
             setTaskCop("");
-            setTaskDescription(""); 
+            setTaskDescription("");
             setSelectedTask({});
             setIsCreated(true);
           }}
@@ -389,7 +385,7 @@ const Tarefas = () => {
                   setTaskCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option >Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

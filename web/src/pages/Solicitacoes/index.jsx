@@ -37,7 +37,7 @@ const Solicitacoes = () => {
   const [selectedRequest, setSelectedRequest] = useState({});
   const [filterVisible, setFilterVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3; 
+  const itemsPerPage = 3;
 
   const {
     handleSubmit,
@@ -128,15 +128,15 @@ const Solicitacoes = () => {
     }
   }
 
-   // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
-   const indexOfLastItem = currentPage * itemsPerPage;
-   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-   const currentItems = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
- 
-   // Função para mudar a página atual
-   const paginate = (pageNumber) => {
-     setCurrentPage(pageNumber);
-   };
+  // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredRequests.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Função para mudar a página atual
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   //Atualiza a lista
   useEffect(() => {
@@ -164,14 +164,23 @@ const Solicitacoes = () => {
             </tr>
           </thead>
           <tbody>
-             {currentItems &&
-              currentItems.map((r) => (
+            {filteredRequests &&
+              filteredRequests?.map(
+                (r) =>
+                  (r.nomesolicitacao
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                    r.policial
+                      .trim()
+                      .toLowerCase()
+                      .includes(searchText.trim().toLowerCase())) && (
                     <tr key={r.id}>
                       <td>{r.id}</td>
                       <td>{r.nomesolicitacao}</td>
                       <td>{new Date(r.data).toLocaleDateString()}</td>
                       <td>
-                        <EditButton className="mb-2"
+                        <EditButton
                           onClick={() => {
                             setSelectedRequest(r);
                             setIsUpdated(true);
@@ -190,40 +199,27 @@ const Solicitacoes = () => {
                     </tr>
                   )
               )}
-            {filteredRequests && filteredRequests.length === 0 && (
-              <tr>
-                <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhuma solicitação
-                </td>
-              </tr>
-            )}
+
+            {filteredRequests &&
+              filteredRequests?.filter(
+                (r) =>
+                  r.nomesolicitacao
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                  r.policial
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLowerCase())
+              ).length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center no_requests">
+                    Não existe nenhuma solicitação
+                  </td>
+                </tr>
+              )}
           </tbody>
         </table>
-        <div>
-          <Pagination className="justify-content-end mb-2">
-            <Pagination.Prev
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-            />
-            {Array.from({
-              length: Math.ceil(filteredRequests.length / itemsPerPage),
-            }).map((_, index) => (
-              <Pagination.Item
-                key={index}
-                active={index + 1 === currentPage}
-                onClick={() => paginate(index + 1)}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => paginate(currentPage + 1)}
-              disabled={
-                currentPage === Math.ceil(filteredRequests.length / itemsPerPage)
-              }
-            />
-          </Pagination>
-        </div>
         <Button
           className="create_button"
           onClick={() => {
@@ -388,7 +384,7 @@ const Solicitacoes = () => {
                   setRequestCop(e.target.value);
                 }}
               >
-                <option selected disabled>Selecione o policial</option>
+                <option>Selecione o policial</option>
                 <option>Marcos Júnior</option>
                 <option>Pedro Fonseca</option>
                 <option>João Albuquerque</option>

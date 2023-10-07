@@ -136,15 +136,41 @@ const Procedimentos = () => {
     findProceds();
   }, []);
 
-  // Função para calcular o índice inicial e final dos itens a serem exibidos na página atual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredProceds.slice(indexOfFirstItem, indexOfLastItem);
+  // //itens para paginação
+  // const itensPorPagina = 5;
+  // const [paginaAtual, setPaginaAtual] = useState(1);
+  // let totalPaginas;
+  // let filteredTasksExibidas;
 
-  // Função para mudar a página atual
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  // const indiceInicio = (paginaAtual - 1) * itensPorPagina;
+  // const indiceFim = paginaAtual * itensPorPagina;
+
+  // if(filteredTasks && filteredTasks.length > 0){
+  //     filteredTasksExibidas = filteredTasks?.slice(indiceInicio, indiceFim);
+  //     totalPaginas = Math.ceil(filteredTasks.length / itensPorPagina);
+  // }else{
+  //     filteredTasksExibidas = 0;
+  //     totalPaginas = 0;
+  // }
+  // const handlePaginaClick = (novaPagina) => {
+  //   setPaginaAtual(novaPagina);
+  // };
+  // const renderNumerosDePagina = () => {
+  //   const numerosDePagina = [];
+  //   for (let pagina = 1; pagina <= totalPaginas; pagina++) {
+  //     numerosDePagina.push(
+  //       <Pagination.Item
+  //         key={pagina}
+  //         active={pagina === paginaAtual}
+  //         onClick={() => handlePaginaClick(pagina)}
+  //       >
+  //         {pagina}
+  //       </Pagination.Item>
+  //     );
+  //   }
+  //   return numerosDePagina;
+  // };
+  //fim de itens para paginação
 
   return (
     <>
@@ -167,65 +193,61 @@ const Procedimentos = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems &&
-              currentItems.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.id}</td>
-                  <td>{r.nomeprocedimento}</td>
-                  <td>{new Date(r.data).toLocaleDateString()}</td>
-                  <td>
-                    <EditButton className="mb-2"
-                      onClick={() => {
-                        setSelectedProcedure(r);
-                        setIsUpdated(true);
-                      }}
-                    >
-                      Editar
-                    </EditButton>
-                    <DeleteButton
-                      onClick={() => {
-                        removeProced(r);
-                      }}
-                    >
-                      Deletar
-                    </DeleteButton>
+            {filteredProceds &&
+              filteredProceds?.map(
+                (r) =>
+                  (r.nomeprocedimento
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                    r.policial
+                      .trim()
+                      .toLowerCase()
+                      .includes(searchText.trim().toLowerCase())) && (
+                    <tr key={r.id}>
+                      <td>{r.id}</td>
+                      <td>{r.nomeprocedimento}</td>
+                      <td>{new Date(r.data).toLocaleDateString()}</td>
+                      <td>
+                        <EditButton
+                          onClick={() => {
+                            setSelectedProcedure(r);
+                            setIsUpdated(true);
+                          }}
+                        >
+                          Editar
+                        </EditButton>
+                        <DeleteButton
+                          onClick={() => {
+                            removeProced(r);
+                          }}
+                        >
+                          Deletar
+                        </DeleteButton>
+                      </td>
+                    </tr>
+                  )
+              )}
+            {filteredProceds
+              && filteredProceds?.filter(
+                (r) =>
+                  r.nomeprocedimento
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLocaleLowerCase()) ||
+                  r.policial
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchText.trim().toLowerCase())
+              ).length === 0 && (
+                <tr>
+                  <td colSpan="4" className="text-center no_requests">
+                    Não existe nenhum procedimento
                   </td>
                 </tr>
-              ))}
-            {filteredProceds && filteredProceds.length === 0 && (
-              <tr>
-                <td colSpan="4" className="text-center no_requests">
-                  Não existe nenhuma solicitação
-                </td>
-              </tr>
-            )}
+              )}
           </tbody>
         </table>
-        <div>
-          <Pagination className="justify-content-end mb-2">
-            <Pagination.Prev
-              onClick={() => paginate(currentPage - 1)}
-              disabled={currentPage === 1}
-            />
-            {Array.from({
-              length: Math.ceil(filteredProceds.length / itemsPerPage),
-            }).map((_, index) => (
-              <Pagination.Item
-                key={index}
-                active={index + 1 === currentPage}
-                onClick={() => paginate(index + 1)}
-              >
-                {index + 1}
-              </Pagination.Item>
-            ))}
-            <Pagination.Next
-              onClick={() => paginate(currentPage + 1)}
-              disabled={
-                currentPage === Math.ceil(filteredProceds.length / itemsPerPage)
-              }
-            />
-          </Pagination>
-        </div>
         <Button
           className="create_button"
           onClick={() => {
